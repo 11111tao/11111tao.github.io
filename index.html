@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Material Design Home Page</title>
+    <!-- Material 符号字体 -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&family=Noto+Sans+SC:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <!-- Typeface 字体 -->
+    <link rel="preconnect" href="https://rsms.me/">
+    <link rel="stylesheet" href="https://rsms.me/inter/inter.css">
+    <!-- 样式文件 -->
+    <link rel="stylesheet" href="/src/styles.css">
+    <!-- Material Web 组件 -->
+    <script type="module" src="/src/index.jsx"></script>
+</head>
+<body>
+    <!-- 头部导航 -->
+    <header class="header">
+        <div class="header-content">
+            <div class="logo">易涛</div>
+            <nav>
+                <md-icon-button id="theme-toggle">
+                    <md-icon>dark_mode</md-icon>
+                </md-icon-button>
+            </nav>
+        </div>
+    </header>
+
+    <!-- 主要内容区域 -->
+    <main class="main-layout">
+        <!-- 左侧个人信息边栏 -->
+        <aside class="sidebar">
+            <div class="profile-section">
+                <!-- 头像 -->
+                <div class="avatar-container">
+                    <img src="./avatar.jpg" alt="易涛" class="avatar">
+                </div>
+                
+                <!-- 基本信息 -->
+                <div class="profile-info">
+                    <h2 class="profile-name">易涛🥰</h2>
+                    <p class="profile-title">不会户外的程序员不是好的化学生</p>
+                    <p class="profile-bio">
+                        热爱编程，专注于现代Web技术。喜欢创造优雅的用户界面和流畅的用户体验。
+                    </p>
+                </div>
+
+                <!-- 社交媒体链接 -->
+                <div class="social-links">
+                    <md-icon-button class="social-link" title="GitHub">
+                        <md-icon>code</md-icon>
+                    </md-icon-button>
+                    <md-icon-button class="social-link" title="LinkedIn">
+                        <md-icon>work</md-icon>
+                    </md-icon-button>
+                    <md-icon-button class="social-link" title="Twitter">
+                        <md-icon>flutter_dash</md-icon>
+                    </md-icon-button>
+                    <md-icon-button class="social-link" title="Email">
+                        <md-icon>email</md-icon>
+                    </md-icon-button>
+                </div>
+
+                <!-- 技能标签 -->
+                <div class="skills-section">
+                    <h3>技能专长</h3>
+                    <div class="skills-grid">
+                        <md-assist-chip>JavaScript</md-assist-chip>
+                        <md-assist-chip>React</md-assist-chip>
+                        <md-assist-chip>Vue.js</md-assist-chip>
+                        <md-assist-chip>Node.js</md-assist-chip>
+                        <md-assist-chip>TypeScript</md-assist-chip>
+                        <md-assist-chip>Python</md-assist-chip>
+                    </div>
+                </div>
+            </div>
+        </aside>
+
+        <!-- 右侧主要内容区域 -->
+        <div class="content-area">
+            <!-- 导航标签 -->
+            <nav class="tab-navigation">
+                <div class="tab-buttons">
+                    <md-filled-button class="tab-button" data-tab="work">
+                        <md-icon slot="icon">work</md-icon>
+                        作品
+                    </md-filled-button>
+                    <md-outlined-button class="tab-button" data-tab="note">
+                        <md-icon slot="icon">note</md-icon>
+                        笔记
+                    </md-outlined-button>
+                    <md-outlined-button class="tab-button" data-tab="blog">
+                        <md-icon slot="icon">article</md-icon>
+                        博客
+                    </md-outlined-button>
+                </div>
+            </nav>
+
+            <!-- 标签页内容 -->
+            <div class="tab-content">
+                <!-- Work 标签页 -->
+                <div class="tab-panel active" id="work-panel">
+                    <h2>我的作品</h2>
+                    <div class="projects-grid">
+                        <!-- 项目卡片 1 -->
+                        <md-outlined-card>
+                            <div class="project-content">
+                                <h3>E-commerce 平台</h3>
+                                <p>基于React和Node.js构建的全栈电商平台，包含用户认证、商品管理、购物车和支付功能。</p>
+                                <div class="project-tags">
+                                    <md-suggestion-chip>React</md-suggestion-chip>
+                                    <md-suggestion-chip>Node.js</md-suggestion-chip>
+                                    <md-suggestion-chip>MongoDB</md-suggestion-chip>
+                                </div>
+                                <md-filled-button>
+                                    <md-icon slot="icon">launch</md-icon>
+                                    查看项目
+                                </md-filled-button>
+                            </div>
+                        </md-outlined-card>
+
+                        <!-- 项目卡片 2 -->
+                        <md-outlined-card>
+                            <div class="project-content">
+                                <h3>任务管理应用</h3>
+                                <p>使用Vue.js和Vuetify构建的现代化任务管理应用，支持拖拽排序、标签分类和团队协作。</p>
+                                <div class="project-tags">
+                                    <md-suggestion-chip>Vue.js</md-suggestion-chip>
+                                    <md-suggestion-chip>Vuetify</md-suggestion-chip>
+                                    <md-suggestion-chip>Firebase</md-suggestion-chip>
+                                </div>
+                                <md-filled-button>
+                                    <md-icon slot="icon">launch</md-icon>
+                                    查看项目
+                                </md-filled-button>
+                            </div>
+                        </md-outlined-card>
+
+                        <!-- 项目卡片 3 -->
+                        <md-outlined-card>
+                            <div class="project-content">
+                                <h3>个人博客系统</h3>
+                                <p>基于Next.js和Prisma构建的现代化博客系统，支持Markdown编辑、SEO优化和评论系统。</p>
+                                <div class="project-tags">
+                                    <md-suggestion-chip>Next.js</md-suggestion-chip>
+                                    <md-suggestion-chip>Prisma</md-suggestion-chip>
+                                    <md-suggestion-chip>PostgreSQL</md-suggestion-chip>
+                                </div>
+                                <md-filled-button>
+                                    <md-icon slot="icon">launch</md-icon>
+                                    查看项目
+                                </md-filled-button>
+                            </div>
+                        </md-outlined-card>
+                    </div>
+                </div>
+
+                <!-- Note 标签页 -->
+                <div class="tab-panel" id="note-panel">
+                    <h2>学习笔记</h2>
+                    <div class="notes-grid">
+                        <md-card>
+                            <div class="note-content">
+                                <h3>Material Design 3 设计系统</h3>
+                                <p class="note-meta">2024-01-15 • 设计</p>
+                                <p>深入理解Material Design 3的设计原则，包括动态颜色、自适应布局和增强的可访问性...</p>
+                                <md-text-button>
+                                    <md-icon slot="icon">read_more</md-icon>
+                                    阅读更多
+                                </md-text-button>
+                            </div>
+                        </md-card>
+
+                        <md-card>
+                            <div class="note-content">
+                                <h3>React 18 新特性解析</h3>
+                                <p class="note-meta">2024-01-10 • 前端</p>
+                                <p>探索React 18中的并发特性、自动批处理、Suspense改进等新功能...</p>
+                                <md-text-button>
+                                    <md-icon slot="icon">read_more</md-icon>
+                                    阅读更多
+                                </md-text-button>
+                            </div>
+                        </md-card>
+
+                        <md-card>
+                            <div class="note-content">
+                                <h3>TypeScript 高级类型技巧</h3>
+                                <p class="note-meta">2024-01-05 • 编程</p>
+                                <p>掌握TypeScript中的条件类型、映射类型、模板字面量类型等高级特性...</p>
+                                <md-text-button>
+                                    <md-icon slot="icon">read_more</md-icon>
+                                    阅读更多
+                                </md-text-button>
+                            </div>
+                        </md-card>
+                    </div>
+                </div>
+
+                <!-- Blog 标签页 -->
+                <div class="tab-panel" id="blog-panel">
+                    <h2>博客</h2>
+                    <div class="blog-posts">
+                        <article class="blog-post">
+                            <h3>构建现代化Web应用的完整指南</h3>
+                            <p class="blog-meta">2024-01-20 • 10分钟阅读</p>
+                            <p>从项目初始化到部署，详细介绍如何构建一个现代化的Web应用。包括技术选型、架构设计、开发流程等...</p>
+                            <div class="blog-actions">
+                                <md-filled-button>
+                                    <md-icon slot="icon">article</md-icon>
+                                    阅读全文
+                                </md-filled-button>
+                                <md-text-button>
+                                    <md-icon slot="icon">favorite_border</md-icon>
+                                    收藏
+                                </md-text-button>
+                            </div>
+                        </article>
+
+                        <article class="blog-post">
+                            <h3>前端性能优化的最佳实践</h3>
+                            <p class="blog-meta">2024-01-18 • 8分钟阅读</p>
+                            <p>分享前端性能优化的实用技巧，包括代码分割、懒加载、缓存策略、图片优化等...</p>
+                            <div class="blog-actions">
+                                <md-filled-button>
+                                    <md-icon slot="icon">article</md-icon>
+                                    阅读全文
+                                </md-filled-button>
+                                <md-text-button>
+                                    <md-icon slot="icon">favorite_border</md-icon>
+                                    收藏
+                                </md-text-button>
+                            </div>
+                        </article>
+
+                        <article class="blog-post">
+                            <h3>CSS Grid 和 Flexbox 的深度对比</h3>
+                            <p class="blog-meta">2024-01-15 • 12分钟阅读</p>
+                            <p>深入分析CSS Grid和Flexbox的异同，以及在不同场景下的最佳使用方式...</p>
+                            <div class="blog-actions">
+                                <md-filled-button>
+                                    <md-icon slot="icon">article</md-icon>
+                                    阅读全文
+                                </md-filled-button>
+                                <md-text-button>
+                                    <md-icon slot="icon">favorite_border</md-icon>
+                                    收藏
+                                </md-text-button>
+                            </div>
+                        </article>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+</body>
+</html>

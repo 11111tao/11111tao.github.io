@@ -1,0 +1,805 @@
+/* Material Design 3 基础样式 */
+:root {
+    /* Material Design 3 颜色系统 */
+    --md-sys-color-primary: #6750a4;
+    --md-sys-color-on-primary: #ffffff;
+    --md-sys-color-primary-container: #eaddff;
+    --md-sys-color-on-primary-container: #21005d;
+    --md-sys-color-secondary: #625b71;
+    --md-sys-color-on-secondary: #ffffff;
+    --md-sys-color-secondary-container: #e8def8;
+    --md-sys-color-on-secondary-container: #1d192b;
+    --md-sys-color-surface: #fffbfe;
+    --md-sys-color-on-surface: #1c1b1f;
+    --md-sys-color-surface-variant: #e7e0ec;
+    --md-sys-color-on-surface-variant: #49454f;
+    --md-sys-color-outline: #79747e;
+    --md-sys-color-outline-variant: #cac4d0;
+    
+    /* 间距系统 */
+    --spacing-xs: 4px;
+    --spacing-sm: 8px;
+    --spacing-md: 16px;
+    --spacing-lg: 24px;
+    --spacing-xl: 32px;
+    --spacing-xxl: 48px;
+    
+    /* 圆角 */
+    --radius-sm: 4px;
+    --radius-md: 8px;
+    --radius-lg: 12px;
+    --radius-xl: 16px;
+    
+    /* 阴影 */
+    --shadow-1: 0px 1px 3px 1px rgba(0, 0, 0, 0.15), 0px 1px 2px 0px rgba(0, 0, 0, 0.30);
+    --shadow-2: 0px 2px 6px 2px rgba(0, 0, 0, 0.15), 0px 1px 2px 0px rgba(0, 0, 0, 0.30);
+    --shadow-3: 0px 4px 8px 3px rgba(0, 0, 0, 0.15), 0px 1px 3px 0px rgba(0, 0, 0, 0.30);
+    
+    /* Typeface 字体变量 */
+    --font-family-base: 'Inter', 'Roboto', 'Noto Sans SC', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    --font-family-display: 'Inter', 'Roboto', 'Noto Sans SC', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    --font-family-mono: 'JetBrains Mono', 'Fira Code', 'Consolas', 'Monaco', monospace;
+    
+    /* 字体大小 */
+    --font-size-xs: 0.75rem;    /* 12px */
+    --font-size-sm: 0.875rem;   /* 14px */
+    --font-size-base: 1rem;     /* 16px */
+    --font-size-lg: 1.125rem;   /* 18px */
+    --font-size-xl: 1.25rem;    /* 20px */
+    --font-size-2xl: 1.5rem;    /* 24px */
+    --font-size-3xl: 1.875rem;  /* 30px */
+    --font-size-4xl: 2.25rem;   /* 36px */
+    --font-size-5xl: 3rem;      /* 48px */
+    
+    /* 字体粗细 */
+    --font-weight-light: 300;
+    --font-weight-normal: 400;
+    --font-weight-medium: 500;
+    --font-weight-semibold: 600;
+    --font-weight-bold: 700;
+    
+    /* 行高 */
+    --line-height-tight: 1.25;
+    --line-height-normal: 1.5;
+    --line-height-relaxed: 1.75;
+    
+    /* 头像尺寸 */
+    --avatar-size: 120px;
+    --avatar-border-width: 3px;
+}
+
+/* 深色主题 */
+.dark-theme {
+    --md-sys-color-primary: #d0bcff;
+    --md-sys-color-on-primary: #381e72;
+    --md-sys-color-primary-container: #4f378b;
+    --md-sys-color-on-primary-container: #eaddff;
+    --md-sys-color-secondary: #ccc2dc;
+    --md-sys-color-on-secondary: #332d41;
+    --md-sys-color-secondary-container: #4a4458;
+    --md-sys-color-on-secondary-container: #e8def8;
+    --md-sys-color-surface: #141218;
+    --md-sys-color-on-surface: #e6e1e5;
+    --md-sys-color-surface-variant: #49454f;
+    --md-sys-color-on-surface-variant: #cac4d0;
+    --md-sys-color-outline: #938f99;
+    --md-sys-color-outline-variant: #49454f;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: var(--font-family-base);
+    font-size: var(--font-size-base);
+    font-weight: var(--font-weight-normal);
+    line-height: var(--line-height-normal);
+    background-color: var(--md-sys-color-surface);
+    color: var(--md-sys-color-on-surface);
+    transition: background-color 0.3s ease, color 0.3s ease;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
+}
+
+/* 头部样式 */
+.header {
+    background-color: var(--md-sys-color-surface);
+    border-bottom: 1px solid var(--md-sys-color-outline-variant);
+    padding: var(--spacing-md) var(--spacing-xl);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    backdrop-filter: blur(10px);
+}
+
+.header-content {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    max-width: 1400px;
+    margin: 0 auto;
+}
+
+.logo {
+    font-family: var(--font-family-display);
+    font-size: var(--font-size-2xl);
+    font-weight: var(--font-weight-medium);
+    color: var(--md-sys-color-primary);
+    letter-spacing: -0.025em;
+}
+
+/* 主布局 */
+.main-layout {
+    display: flex;
+    min-height: calc(100vh - 80px);
+    max-width: 1400px;
+    margin: 0 auto;
+}
+
+/* 左侧边栏 */
+.sidebar {
+    width: 300px;
+    background-color: var(--md-sys-color-surface);
+    border-right: 1px solid var(--md-sys-color-outline-variant);
+    padding: var(--spacing-xl);
+    position: sticky;
+    top: 80px;
+    height: calc(100vh - 80px);
+    overflow-y: auto;
+}
+
+.profile-section {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-xl);
+}
+
+/* 头像 */
+.avatar-container {
+    text-align: center;
+    margin-bottom: var(--spacing-lg);
+    padding: var(--spacing-sm);
+}
+
+.avatar {
+    width: var(--avatar-size);
+    height: var(--avatar-size);
+    border-radius: 50%;
+    object-fit: cover;
+    object-position: center;
+    border: var(--avatar-border-width) solid var(--md-sys-color-primary);
+    display: block;
+    margin: 0 auto;
+    background-color: var(--md-sys-color-surface-variant);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    /* 让照片在框里显示得更小一些 */
+    transform: scale(1.05);
+}
+
+.avatar:hover {
+    transform: scale(0.9);
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
+}
+
+/* 头像加载失败时的样式 */
+.avatar:not([src]), 
+.avatar[src=""],
+.avatar[src*="error"] {
+    background-color: var(--md-sys-color-primary-container);
+    color: var(--md-sys-color-on-primary-container);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 2rem;
+    font-weight: 500;
+}
+
+/* 个人信息 */
+.profile-info {
+    text-align: center;
+}
+
+.profile-name {
+    font-family: var(--font-family-display);
+    font-size: var(--font-size-2xl);
+    font-weight: var(--font-weight-semibold);
+    color: var(--md-sys-color-on-surface);
+    margin-bottom: var(--spacing-sm);
+    letter-spacing: -0.025em;
+}
+
+.profile-title {
+    font-family: var(--font-family-base);
+    font-size: var(--font-size-lg);
+    font-weight: var(--font-weight-medium);
+    color: var(--md-sys-color-primary);
+    margin-bottom: var(--spacing-md);
+    letter-spacing: -0.01em;
+}
+
+.profile-bio {
+    font-family: var(--font-family-base);
+    font-size: var(--font-size-sm);
+    font-weight: var(--font-weight-normal);
+    color: var(--md-sys-color-on-surface-variant);
+    line-height: var(--line-height-relaxed);
+}
+
+/* 社交媒体链接 */
+.social-links {
+    display: flex;
+    justify-content: center;
+    gap: var(--spacing-sm);
+    margin-bottom: var(--spacing-lg);
+}
+
+.social-link {
+    color: var(--md-sys-color-on-surface-variant);
+    transition: color 0.3s ease;
+}
+
+.social-link:hover {
+    color: var(--md-sys-color-primary);
+}
+
+/* 技能部分 */
+.skills-section h3 {
+    font-family: var(--font-family-base);
+    font-size: var(--font-size-base);
+    font-weight: var(--font-weight-medium);
+    color: var(--md-sys-color-on-surface);
+    margin-bottom: var(--spacing-md);
+    letter-spacing: -0.01em;
+}
+
+.skills-grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--spacing-sm);
+}
+
+/* 右侧内容区域 */
+.content-area {
+    flex: 1;
+    padding: var(--spacing-xl);
+    background-color: var(--md-sys-color-surface);
+}
+
+/* 标签导航 */
+.tab-navigation {
+    margin-bottom: var(--spacing-xl);
+    border-bottom: 1px solid var(--md-sys-color-outline-variant);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.tab-buttons {
+    display: flex;
+    gap: var(--spacing-sm);
+    padding-bottom: var(--spacing-md);
+    justify-content: center;
+    align-items: center;
+}
+
+/* 标签按钮基础样式 */
+.tab-button {
+    min-width: 120px;
+    transition: all 0.3s ease;
+    position: relative;
+}
+
+/* 激活状态的标签按钮样式 */
+.tab-button.active,
+.tab-button.active.md-filled-button,
+.tab-buttons .tab-button.active,
+.tab-buttons .tab-button.active.md-filled-button {
+    background-color: var(--md-sys-color-primary) !important;
+    color: var(--md-sys-color-on-primary) !important;
+    border-color: var(--md-sys-color-primary) !important;
+}
+
+/* 非激活状态的标签按钮样式 */
+.tab-button:not(.active),
+.tab-button:not(.active).md-outlined-button,
+.tab-buttons .tab-button:not(.active),
+.tab-buttons .tab-button:not(.active).md-outlined-button {
+    background-color: transparent !important;
+    color: var(--md-sys-color-on-surface) !important;
+    border-color: var(--md-sys-color-outline) !important;
+}
+
+/* 悬停效果 */
+.tab-button:not(.active):hover,
+.tab-button:not(.active).md-outlined-button:hover,
+.tab-buttons .tab-button:not(.active):hover,
+.tab-buttons .tab-button:not(.active).md-outlined-button:hover {
+    background-color: var(--md-sys-color-primary-container) !important;
+    color: var(--md-sys-color-on-primary-container) !important;
+    border-color: var(--md-sys-color-primary) !important;
+}
+
+/* 确保图标颜色也正确 */
+.tab-button.active md-icon,
+.tab-button.active.md-filled-button md-icon {
+    color: var(--md-sys-color-on-primary) !important;
+}
+
+.tab-button:not(.active) md-icon,
+.tab-button:not(.active).md-outlined-button md-icon {
+    color: inherit !important;
+}
+
+/* 强制覆盖Material Web组件的默认样式 */
+.tab-button,
+.tab-buttons .tab-button {
+    --md-sys-color-primary: var(--md-sys-color-primary) !important;
+    --md-sys-color-on-primary: var(--md-sys-color-on-primary) !important;
+    --md-sys-color-primary-container: var(--md-sys-color-primary-container) !important;
+    --md-sys-color-on-primary-container: var(--md-sys-color-on-primary-container) !important;
+    --md-sys-color-outline: var(--md-sys-color-outline) !important;
+    --md-sys-color-on-surface: var(--md-sys-color-on-surface) !important;
+}
+
+/* 额外的强制样式覆盖 */
+.tab-buttons md-filled-button.tab-button.active {
+    background-color: var(--md-sys-color-primary) !important;
+    color: var(--md-sys-color-on-primary) !important;
+    border-color: var(--md-sys-color-primary) !important;
+}
+
+.tab-buttons md-outlined-button.tab-button:not(.active) {
+    background-color: transparent !important;
+    color: var(--md-sys-color-on-surface) !important;
+    border-color: var(--md-sys-color-outline) !important;
+}
+
+/* 标签页内容 */
+.tab-content {
+    position: relative;
+}
+
+.tab-panel {
+    display: none;
+    animation: fadeIn 0.3s ease;
+}
+
+.tab-panel.active {
+    display: block;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* 标签页标题 */
+.tab-panel h2 {
+    font-family: var(--font-family-display);
+    font-size: var(--font-size-4xl);
+    font-weight: var(--font-weight-light);
+    color: var(--md-sys-color-on-surface);
+    margin-bottom: var(--spacing-xl);
+    letter-spacing: -0.02em;
+}
+
+/* 项目网格 */
+.projects-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+    gap: var(--spacing-lg);
+}
+
+.project-content {
+    padding: var(--spacing-xl);
+}
+
+.project-content h3 {
+    font-family: var(--font-family-display);
+    font-size: var(--font-size-xl);
+    font-weight: var(--font-weight-medium);
+    color: var(--md-sys-color-on-surface);
+    margin-bottom: var(--spacing-md);
+    letter-spacing: -0.01em;
+}
+
+.project-content p {
+    font-family: var(--font-family-base);
+    font-size: var(--font-size-sm);
+    font-weight: var(--font-weight-normal);
+    color: var(--md-sys-color-on-surface-variant);
+    margin-bottom: var(--spacing-lg);
+    line-height: var(--line-height-relaxed);
+}
+
+.project-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--spacing-sm);
+    margin-bottom: var(--spacing-lg);
+}
+
+/* 笔记网格 */
+.notes-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: var(--spacing-lg);
+}
+
+.note-content {
+    padding: var(--spacing-xl);
+}
+
+.note-content h3 {
+    font-family: var(--font-family-display);
+    font-size: var(--font-size-xl);
+    font-weight: var(--font-weight-medium);
+    color: var(--md-sys-color-on-surface);
+    margin-bottom: var(--spacing-sm);
+    letter-spacing: -0.01em;
+}
+
+.note-meta {
+    font-family: var(--font-family-base);
+    font-size: var(--font-size-sm);
+    font-weight: var(--font-weight-normal);
+    color: var(--md-sys-color-on-surface-variant);
+    margin-bottom: var(--spacing-md);
+}
+
+.note-content p {
+    font-family: var(--font-family-base);
+    font-size: var(--font-size-sm);
+    font-weight: var(--font-weight-normal);
+    color: var(--md-sys-color-on-surface-variant);
+    margin-bottom: var(--spacing-lg);
+    line-height: var(--line-height-relaxed);
+}
+
+/* 博客文章 */
+.blog-posts {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-xl);
+}
+
+.blog-post {
+    padding: var(--spacing-xl);
+    border: 1px solid var(--md-sys-color-outline-variant);
+    border-radius: var(--radius-lg);
+    background-color: var(--md-sys-color-surface);
+}
+
+.blog-post h3 {
+    font-family: var(--font-family-display);
+    font-size: var(--font-size-2xl);
+    font-weight: var(--font-weight-medium);
+    color: var(--md-sys-color-on-surface);
+    margin-bottom: var(--spacing-sm);
+    letter-spacing: -0.025em;
+}
+
+.blog-meta {
+    font-family: var(--font-family-base);
+    font-size: var(--font-size-sm);
+    font-weight: var(--font-weight-normal);
+    color: var(--md-sys-color-on-surface-variant);
+    margin-bottom: var(--spacing-md);
+}
+
+.blog-post p {
+    font-family: var(--font-family-base);
+    font-size: var(--font-size-base);
+    font-weight: var(--font-weight-normal);
+    color: var(--md-sys-color-on-surface-variant);
+    margin-bottom: var(--spacing-lg);
+    line-height: var(--line-height-relaxed);
+}
+
+.blog-actions {
+    display: flex;
+    gap: var(--spacing-md);
+    align-items: center;
+}
+
+/* 响应式设计 */
+@media (max-width: 1024px) {
+    .main-layout {
+        flex-direction: column;
+    }
+    
+    .sidebar {
+        width: 100%;
+        position: static;
+        height: auto;
+        border-right: none;
+        border-bottom: 1px solid var(--md-sys-color-outline-variant);
+    }
+    
+    .profile-section {
+        flex-direction: row;
+        align-items: center;
+        gap: var(--spacing-lg);
+    }
+    
+    .avatar-container {
+        margin-bottom: 0;
+    }
+    
+    .profile-info {
+        text-align: left;
+        flex: 1;
+    }
+    
+    .social-links {
+        justify-content: flex-start;
+        margin-bottom: 0;
+    }
+    
+    .skills-section {
+        flex: 1;
+    }
+}
+
+@media (max-width: 768px) {
+    .header {
+        padding: var(--spacing-md);
+    }
+    
+    .content-area {
+        padding: var(--spacing-md);
+    }
+    
+    .sidebar {
+        padding: var(--spacing-md);
+    }
+    
+    .profile-section {
+        flex-direction: column;
+        text-align: center;
+    }
+    
+    .profile-info {
+        text-align: center;
+    }
+    
+    .social-links {
+        justify-content: center;
+    }
+    
+    .projects-grid,
+    .notes-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .tab-panel h2 {
+        font-size: 1.5rem;
+    }
+}
+
+/* 博客详情模态框 */
+.blog-modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+    backdrop-filter: blur(5px);
+    transition: opacity 0.3s ease;
+}
+
+.blog-modal-content {
+    background-color: var(--md-sys-color-surface);
+    border-radius: var(--radius-lg);
+    width: 90%;
+    max-width: 800px;
+    max-height: 90vh;
+    display: flex;
+    flex-direction: column;
+    box-shadow: var(--shadow-3);
+    overflow: hidden;
+}
+
+.blog-modal-header {
+    padding: var(--spacing-xl);
+    border-bottom: 1px solid var(--md-sys-color-outline-variant);
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-sm);
+    position: relative;
+}
+
+.blog-modal-header h2 {
+    font-family: var(--font-family-display);
+    font-size: var(--font-size-2xl);
+    font-weight: var(--font-weight-semibold);
+    color: var(--md-sys-color-on-surface);
+    margin: 0;
+}
+
+#modal-meta {
+    font-family: var(--font-family-base);
+    font-size: var(--font-size-sm);
+    color: var(--md-sys-color-on-surface-variant);
+}
+
+.close-button {
+    position: absolute;
+    top: var(--spacing-xl);
+    right: var(--spacing-xl);
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: var(--md-sys-color-on-surface-variant);
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background-color 0.3s ease;
+}
+
+.close-button:hover {
+    background-color: var(--md-sys-color-surface-variant);
+}
+
+.blog-modal-body {
+    padding: var(--spacing-xl);
+    overflow-y: auto;
+    flex: 1;
+}
+
+/* Markdown内容样式 */
+.blog-modal-body h1,
+.blog-modal-body h2,
+.blog-modal-body h3,
+.blog-modal-body h4,
+.blog-modal-body h5,
+.blog-modal-body h6 {
+    font-family: var(--font-family-display);
+    font-weight: var(--font-weight-medium);
+    color: var(--md-sys-color-on-surface);
+    margin-top: var(--spacing-xl);
+    margin-bottom: var(--spacing-md);
+}
+
+.blog-modal-body h1 {
+    font-size: var(--font-size-3xl);
+    border-bottom: 1px solid var(--md-sys-color-outline-variant);
+    padding-bottom: var(--spacing-md);
+}
+
+.blog-modal-body h2 {
+    font-size: var(--font-size-2xl);
+}
+
+.blog-modal-body h3 {
+    font-size: var(--font-size-xl);
+}
+
+.blog-modal-body p {
+    font-family: var(--font-family-base);
+    font-size: var(--font-size-base);
+    color: var(--md-sys-color-on-surface-variant);
+    margin-bottom: var(--spacing-md);
+    line-height: var(--line-height-relaxed);
+}
+
+.blog-modal-body ul,
+.blog-modal-body ol {
+    font-family: var(--font-family-base);
+    font-size: var(--font-size-base);
+    color: var(--md-sys-color-on-surface-variant);
+    margin-bottom: var(--spacing-md);
+    padding-left: var(--spacing-xl);
+}
+
+.blog-modal-body li {
+    margin-bottom: var(--spacing-sm);
+}
+
+.blog-modal-body strong {
+    font-weight: var(--font-weight-semibold);
+    color: var(--md-sys-color-on-surface);
+}
+
+.blog-modal-body code {
+    font-family: var(--font-family-mono);
+    font-size: var(--font-size-sm);
+    background-color: var(--md-sys-color-surface-variant);
+    padding: 2px 4px;
+    border-radius: var(--radius-sm);
+    color: var(--md-sys-color-on-surface-variant);
+}
+
+.blog-modal-body pre {
+    background-color: var(--md-sys-color-surface-variant);
+    padding: var(--spacing-md);
+    border-radius: var(--radius-md);
+    overflow-x: auto;
+    margin-bottom: var(--spacing-md);
+}
+
+.blog-modal-body pre code {
+    background-color: transparent;
+    padding: 0;
+}
+
+/* 上传按钮样式 */
+.upload-container {
+    margin-bottom: var(--spacing-xl);
+}
+
+#upload-blog-button {
+    background-color: var(--md-sys-color-primary);
+    color: var(--md-sys-color-on-primary);
+    --md-filled-button-container-color: var(--md-sys-color-primary);
+    --md-filled-button-label-text-color: var(--md-sys-color-on-primary);
+}
+
+/* 模态框打开时防止页面滚动 */
+.modal-open {
+    overflow: hidden;
+}
+
+/* 响应式模态框 */
+@media (max-width: 768px) {
+    .blog-modal-content {
+        width: 95%;
+        max-height: 95vh;
+    }
+    
+    .blog-modal-header,
+    .blog-modal-body {
+        padding: var(--spacing-lg);
+    }
+    
+    .blog-modal-header h2 {
+        font-size: var(--font-size-xl);
+    }
+}
+
+/* 工具提示 */
+.tooltip {
+    position: relative;
+    display: inline-block;
+}
+
+.tooltip .tooltiptext {
+    visibility: hidden;
+    width: 120px;
+    background-color: var(--md-sys-color-surface-variant);
+    color: var(--md-sys-color-on-surface-variant);
+    text-align: center;
+    border-radius: var(--radius-sm);
+    padding: var(--spacing-xs) var(--spacing-sm);
+    position: absolute;
+    z-index: 1;
+    bottom: 125%;
+    left: 50%;
+    margin-left: -60px;
+    opacity: 0;
+    transition: opacity 0.3s;
+}
+
+.tooltip:hover .tooltiptext {
+    visibility: visible;
+    opacity: 1;
+}
