@@ -277,6 +277,9 @@ function setupThemeToggle() {
     }
 }
 
+//标签按钮高亮功能
+
+
 // 标签页切换功能
 function setupTabNavigation() {
     const tabButtons = document.querySelectorAll('.tab-button');
@@ -297,6 +300,7 @@ function setupTabNavigation() {
             }
         });
         
+
         // 显示对应标签页
         tabPanels.forEach(panel => {
             panel.style.display = 'none';
@@ -311,6 +315,11 @@ function setupTabNavigation() {
     tabButtons.forEach(button => {
         button.addEventListener('click', () => handleTabClick(button));
     });
+
+    // 初始化时，默认选中第一个tab (作品)
+    if (tabButtons.length > 0) {
+        handleTabClick(tabButtons[0]);
+    }
 }
 
 // 设置事件监听器
