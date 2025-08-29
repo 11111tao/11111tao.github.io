@@ -4,6 +4,7 @@ import '@material/web/all.js';
 // 全局变量
 let marked = null;
 let blogData = {};
+let noteData = {}; // Added for notes
 
 // 加载 Markdown 解析器
 function loadMarkedLibrary() {
@@ -27,7 +28,7 @@ function saveBlogData() {
 }
 
 // 从 localStorage 加载博客数据
-function loadBlogData() {
+async function loadBlogData() {
     const savedData = localStorage.getItem('blogData');
     if (savedData) {
         try {
@@ -38,48 +39,102 @@ function loadBlogData() {
             blogData = {};
         }
     } else {
-        // 初始化默认博客数据
-        blogData = {
-            '构建现代化Web应用的完整指南': {
-                title: '构建现代化Web应用的完整指南',
-                date: '2024-01-20',
-                readTime: '10分钟阅读',
-                content: '# 构建现代化Web应用的完整指南\n\n## 1. 技术选型\n\n在开始任何Web项目之前，选择合适的技术栈至关重要...'
-            },
-            '前端性能优化的最佳实践': {
-                title: '前端性能优化的最佳实践',
-                date: '2024-01-18',
-                readTime: '8分钟阅读',
-                content: '# 前端性能优化的最佳实践\n\n前端性能对用户体验和SEO至关重要...'
+        blogData = {};
+    }
+
+    // Fetch blogs from server
+    try {
+        const response = await fetch('/api/blogs');
+        if (response.ok) {
+            const result = await response.json();
+            if (result.ok && result.blogs) {
+                result.blogs.forEach(blog => {
+                    if (!blogData[blog.title]) { // Add only new blogs
+                        blogData[blog.title] = blog;
+                    }
+                });
+                saveBlogData(); // Save merged data back to localStorage
+                console.log('成功从服务器加载博客数据！');
             }
-        };
+        } else {
+            console.error('从服务器加载博客数据失败:', response.statusText);
+        }
+    } catch (error) {
+        console.error('获取博客数据失败:', error);
     }
 }
 
-// 创建博客详情模态框
-function createBlogModal() {
+// 保存笔记数据到 localStorage
+function saveNoteData() {
+    try {
+        localStorage.setItem('noteData', JSON.stringify(noteData));
+        console.log('成功保存笔记数据到 localStorage');
+    } catch (error) {
+        console.error('保存笔记数据失败:', error);
+    }
+}
+
+// 从 localStorage 加载笔记数据
+async function loadNoteData() {
+    const savedData = localStorage.getItem('noteData');
+    if (savedData) {
+        try {
+            noteData = JSON.parse(savedData);
+            console.log('成功从 localStorage 加载笔记数据');
+        } catch (error) {
+            console.error('解析 localStorage 数据失败:', error);
+            noteData = {};
+        }
+    } else {
+        noteData = {};
+    }
+
+    // Fetch notes from server
+    try {
+        const response = await fetch('/api/notes');
+        if (response.ok) {
+            const result = await response.json();
+            if (result.ok && result.notes) {
+                result.notes.forEach(note => {
+                    if (!noteData[note.title]) { // Add only new notes
+                        noteData[note.title] = note;
+                    }
+                });
+                saveNoteData(); // Save merged data back to localStorage
+                console.log('成功从服务器加载笔记数据！');
+            }
+        } else {
+            console.error('从服务器加载笔记数据失败:', response.statusText);
+        }
+    } catch (error) {
+        console.error('获取笔记数据失败:', error);
+    }
+}
+
+// 创建 Markdown 阅读模态框
+function createMarkdownModal() {
     const modal = document.createElement('div');
-    modal.className = 'blog-modal';
-    modal.id = 'blog-modal';
+    modal.className = 'markdown-modal'; // Changed class name
+    modal.id = 'markdown-modal'; // Changed ID
     modal.style.display = 'none';
     
     modal.innerHTML = `
-        <div class="blog-modal-content">
-            <div class="blog-modal-header">
-                <h2 id="modal-title"></h2>
-                <div id="modal-meta"></div>
-                <button id="close-modal" class="close-button">
+        <div class="markdown-modal-content">
+            <div class="markdown-modal-header">
+                <h2 id="markdown-modal-title"></h2>
+                <div id="markdown-modal-meta"></div>
+                <button id="close-markdown-modal" class="close-button">
                     <md-icon>close</md-icon>
                 </button>
             </div>
-            <div class="blog-modal-body" id="modal-content"></div>
+            <div class="markdown-modal-body" id="markdown-modal-content"></div>
         </div>
     `;
     
     document.body.appendChild(modal);
     
     // 关闭模态框
-    document.getElementById('close-modal').addEventListener('click', () => {
+    document.getElementById('close-markdown-modal').addEventListener('click', () => {
         modal.style.display = 'none';
         document.body.classList.remove('modal-open');
     });
@@ -101,54 +156,93 @@ function createBlogModal() {
     });
 }
 
-// 显示博客详情
-function showBlogDetails(blogTitle) {
-    const blog = blogData[blogTitle];
-    if (!blog) return;
-    
-    const modal = document.getElementById('blog-modal');
-    const modalTitle = document.getElementById('modal-title');
-    const modalMeta = document.getElementById('modal-meta');
-    const modalContent = document.getElementById('modal-content');
-    
-    modalTitle.textContent = blog.title;
-    modalMeta.textContent = `${blog.date} • ${blog.readTime}`;
-    
+// 显示 Markdown 内容模态框
+function showMarkdownModal(title, meta, markdownContent) {
+    const modal = document.getElementById('markdown-modal');
+    const modalTitle = document.getElementById('markdown-modal-title');
+    const modalMeta = document.getElementById('markdown-modal-meta');
+    const modalContent = document.getElementById('markdown-modal-content');
+
+    modalTitle.textContent = title;
+    modalMeta.textContent = meta;
+
     if (marked) {
-        const htmlContent = marked.parse(blog.content);
+        const htmlContent = marked.parse(markdownContent);
         modalContent.innerHTML = htmlContent;
     } else {
-        modalContent.textContent = blog.content;
+        modalContent.textContent = markdownContent;
     }
-    
+
     modal.style.display = 'flex';
     document.body.classList.add('modal-open');
 }
 
+// 显示博客详情
+function showBlogDetails(blogTitle) {
+    const blog = blogData[blogTitle];
+    if (!blog) return;
+    showMarkdownModal(blog.title, `${blog.date} • ${blog.readTime}`, blog.fullContent || blog.content);
+}
+
 // 添加新博客到UI
-function addBlogToUI(title, date, readTime, excerpt) {
+function addBlogToUI(title, date, readTime, excerpt, content) {
     const blogPosts = document.querySelector('.blog-posts');
     if (!blogPosts) return;
     
-    const newBlog = document.createElement('article');
-    newBlog.className = 'blog-post';
+    const newBlog = document.createElement('md-outlined-card'); // Use md-outlined-card for consistency
+    newBlog.className = 'blog-post-card'; // A new class for consistent styling
     newBlog.innerHTML = `
-        <h3>${title}</h3>
-        <p class="blog-meta">${date} • ${readTime}</p>
-        <p>${excerpt}</p>
-        <div class="blog-actions">
-            <md-filled-button onclick="showBlogDetails('${title}')">
-                <md-icon slot="icon">article</md-icon>
-                阅读全文
-            </md-filled-button>
-            <md-text-button onclick="toggleFavorite(this)">
-                <md-icon slot="icon">favorite_border</md-icon>
-                收藏
-            </md-filled-button>
+        <div class="blog-content">
+            <h3>${title}</h3>
+            <p class="blog-meta">${date} • ${readTime}</p>
+            <p>${excerpt}</p>
+            <div class="blog-actions">
+                <md-filled-button onclick="showBlogDetails('${title}')" style="width: 150px;">
+                    <md-icon slot="icon">read_more</md-icon>
+                    阅读更多
+                </md-filled-button>
+            </div>
         </div>
     `;
     
+    // Store full content for modal
+    blogData[title].fullContent = content;
+
     blogPosts.insertBefore(newBlog, blogPosts.firstChild);
+}
+
+// 添加新笔记到UI
+function addNoteToUI(title, date, excerpt, content) {
+    const notesGrid = document.querySelector('.notes-grid');
+    if (!notesGrid) return;
+
+    const newNote = document.createElement('md-outlined-card'); // Use md-outlined-card for consistency
+    newNote.className = 'note-post-card'; // A new class for consistent styling
+    newNote.innerHTML = `
+        <div class="note-content">
+            <h3>${title}</h3>
+            <p class="note-meta">${date}</p>
+            <p>${excerpt}</p>
+            <div class="blog-actions">
+                <md-filled-button onclick="showNoteDetails('${title}')" style="width: 150px;">
+                    <md-icon slot="icon">read_more</md-icon>
+                    阅读更多
+                </md-filled-button>
+            </div>
+        </div>
+    `;
+    
+    // Store full content for modal
+    noteData[title].fullContent = content;
+
+    notesGrid.insertBefore(newNote, notesGrid.firstChild);
+}
+
+// 显示笔记详情
+function showNoteDetails(noteTitle) {
+    const note = noteData[noteTitle];
+    if (!note) return;
+    showMarkdownModal(note.title, note.date, note.fullContent || note.content);
 }
 
 // 收藏切换功能
@@ -161,25 +255,48 @@ function toggleFavorite(button) {
     }
 }
 
+// Make functions globally accessible for inline onclick handlers
+window.showBlogDetails = showBlogDetails;
+window.showNoteDetails = showNoteDetails;
+window.toggleFavorite = toggleFavorite;
+
 // 渲染博客列表
 function renderBlogList() {
     const blogPosts = document.querySelector('.blog-posts');
     if (!blogPosts) return;
     
-    // 清空现有博客列表，保留上传容器
-    const uploadContainer = document.querySelector('.upload-container');
-    if (uploadContainer) {
-        const blogPostElements = document.querySelectorAll('.blog-post');
-        blogPostElements.forEach(post => post.remove());
-    } else {
-        blogPosts.innerHTML = '';
+    // Clear existing blog list, preserve upload container
+    const uploadContainer = blogPosts.nextElementSibling; // Get the next sibling (upload container)
+    blogPosts.innerHTML = ''; // Clear existing articles
+    if (uploadContainer && uploadContainer.className.includes('upload-container')) {
+        blogPosts.after(uploadContainer); // Re-insert upload container after clearing
     }
-    
-    // 重新添加所有博客文章
+
+    // Re-add all blog articles
     Object.keys(blogData).forEach(title => {
         const blog = blogData[title];
         const excerpt = blog.content.substring(0, 150) + '...';
-        addBlogToUI(title, blog.date, blog.readTime, excerpt);
+        addBlogToUI(title, blog.date, blog.readTime, excerpt, blog.content);
+    });
+}
+
+// 渲染笔记列表
+function renderNoteList() {
+    const notesGrid = document.querySelector('.notes-grid');
+    if (!notesGrid) return;
+
+    // Clear existing note list, preserve upload container
+    const uploadContainer = notesGrid.nextElementSibling; // Get the next sibling (upload container)
+    notesGrid.innerHTML = ''; // Clear existing notes
+    if (uploadContainer && uploadContainer.className.includes('upload-container')) {
+        notesGrid.after(uploadContainer); // Re-insert upload container after clearing
+    }
+
+    // Re-add all notes
+    Object.keys(noteData).forEach(title => {
+        const note = noteData[title];
+        const excerpt = note.content.substring(0, 150) + '...';
+        addNoteToUI(title, note.date, excerpt, note.content);
     });
 }
 
@@ -193,7 +310,9 @@ function setupBlogUpload() {
     
     const uploadButton = document.createElement('md-filled-button');
     uploadButton.id = 'upload-blog-button';
-    uploadButton.innerHTML = '<md-icon slot="icon">upload_file</md-icon>上传Markdown文件';
+    uploadButton.innerHTML = '<md-icon slot="icon">upload_file</md-icon>上传博客';
+    uploadButton.style.width = '180px';
+    
     
     const fileInput = document.createElement('input');
     fileInput.type = 'file';
@@ -204,8 +323,12 @@ function setupBlogUpload() {
     uploadContainer.appendChild(uploadButton);
     uploadContainer.appendChild(fileInput);
     
-    const blogHeader = blogPanel.querySelector('h2');
-    blogHeader.after(uploadContainer);
+    const blogPosts = blogPanel.querySelector('.blog-posts');
+    if (blogPosts) {
+        blogPosts.after(uploadContainer); // Insert after blog posts
+    } else {
+        blogPanel.appendChild(uploadContainer); // Fallback if no blog posts yet
+    }
     
     uploadButton.addEventListener('click', () => {
         fileInput.click();
@@ -242,12 +365,12 @@ function setupBlogUpload() {
                 };
                 
                 saveBlogData();
-                addBlogToUI(title, dateStr, readTime, markdownContent.substring(0, 150) + '...');
+                addBlogToUI(title, dateStr, readTime, markdownContent.substring(0, 150) + '...', markdownContent);
                 
                 // 上传到后端
                 const formData = new FormData();
                 formData.append('file', file);
-                fetch('/api/upload', {
+                fetch('/api/upload-blog', {
                     method: 'POST',
                     body: formData
                 }).then(res => res.json())
@@ -261,6 +384,92 @@ function setupBlogUpload() {
             } catch (error) {
                 console.error('上传文件失败:', error);
                 alert('上传文件失败，请检查文件格式。');
+            }
+        };
+        reader.readAsText(file);
+    });
+}
+
+// 笔记上传功能
+function setupNoteUpload() {
+    const notePanel = document.getElementById('note-panel');
+    if (!notePanel) return;
+
+    const uploadContainer = document.createElement('div');
+    uploadContainer.className = 'upload-container';
+
+    const uploadButton = document.createElement('md-filled-button');
+    uploadButton.id = 'upload-note-button';
+    uploadButton.innerHTML = '<md-icon slot="icon">upload_file</md-icon>上传笔记';
+    uploadButton.style.minWidth = '180px';
+
+    const fileInput = document.createElement('input');
+    fileInput.type = 'file';
+    fileInput.accept = '.md,.markdown';
+    fileInput.style.display = 'none';
+    fileInput.id = 'note-file-input';
+
+    uploadContainer.appendChild(uploadButton);
+    uploadContainer.appendChild(fileInput);
+
+    const notesGrid = notePanel.querySelector('.notes-grid');
+    if (notesGrid) {
+        notesGrid.after(uploadContainer); // Insert after notes grid
+    } else {
+        notePanel.appendChild(uploadContainer); // Fallback if no notes yet
+    }
+
+    uploadButton.addEventListener('click', () => {
+        fileInput.click();
+    });
+
+    fileInput.addEventListener('change', (event) => {
+        const file = event.target.files[0];
+        if (!file) return;
+
+        const reader = new FileReader();
+        reader.onload = (e) => {
+            try {
+                const markdownContent = e.target.result;
+
+                // 提取标题
+                const lines = markdownContent.split('\n');
+                let title = '新上传的笔记';
+                if (lines.length > 0 && lines[0].startsWith('# ')) {
+                    title = lines[0].substring(2).trim();
+                }
+
+                // 生成日期
+                const today = new Date();
+                const dateStr = `${today.getFullYear()}-${String(today.getMonth() + 1).padStart(2, '0')}-${String(today.getDate()).padStart(2, '0')}`;
+
+                // 保存笔记数据
+                noteData[title] = {
+                    title: title,
+                    date: dateStr,
+                    content: markdownContent
+                };
+
+                saveNoteData();
+                addNoteToUI(title, dateStr, markdownContent.substring(0, 150) + '...', markdownContent);
+
+                // Optionally, upload to backend if a /api/upload endpoint for notes exists
+                const formData = new FormData();
+                formData.append('file', file);
+                fetch('/api/upload-note', {
+                    method: 'POST',
+                    body: formData
+                }).then(res => res.json())
+                  .then(data => console.log('服务器已保存笔记文件:', data))
+                  .catch(error => {
+                      console.error('上传笔记到服务器失败:', error);
+                      alert('上传笔记到服务器失败，但已在本地添加。');
+                  });
+
+                console.log(`成功上传笔记: ${title}`);
+            } catch (error) {
+                console.error('上传笔记文件失败:', error);
+                alert('上传笔记文件失败，请检查文件格式。');
             }
         };
         reader.readAsText(file);
@@ -292,14 +501,11 @@ function setupTabNavigation() {
         tabButtons.forEach(button => {
             const isActive = button.getAttribute('data-tab') === targetTab;
             if (isActive) {
-                button.classList.remove('md-outlined-button');
-                button.classList.add('md-filled-button');
+                button.setAttribute('filled', 'true');
             } else {
-                button.classList.remove('md-filled-button');
-                button.classList.add('md-outlined-button');
+                button.removeAttribute('filled');
             }
         });
-        
 
         // 显示对应标签页
         tabPanels.forEach(panel => {
@@ -316,8 +522,12 @@ function setupTabNavigation() {
         button.addEventListener('click', () => handleTabClick(button));
     });
 
-    // 初始化时，默认选中第一个tab (作品)
-    if (tabButtons.length > 0) {
+    // 初始化时，根据URL哈希或默认选中第一个tab (作品)
+    const initialTab = window.location.hash.substring(1) || tabButtons[0]?.getAttribute('data-tab');
+    const initialButton = Array.from(tabButtons).find(button => button.getAttribute('data-tab') === initialTab);
+    if (initialButton) {
+        handleTabClick(initialButton);
+    } else if (tabButtons.length > 0) {
         handleTabClick(tabButtons[0]);
     }
 }
@@ -371,16 +581,22 @@ function initializeApp() {
         .then((markedInstance) => {
             marked = markedInstance;
             console.log('Markdown解析器加载成功！');
+            // Once marked is loaded, then load data and render
+            loadBlogData();
+            loadNoteData();
+            renderBlogList();
+            renderNoteList();
         })
         .catch((error) => {
             console.error('加载Markdown解析器失败:', error);
         });
     
-    // 初始化功能
-    loadBlogData();
-    renderBlogList();
-    createBlogModal();
+    // 初始化功能 (moved inside .then block for marked loading)
+    // loadBlogData(); 
+    // renderBlogList();
+    createMarkdownModal(); // Changed to createMarkdownModal
     setupBlogUpload();
+    setupNoteUpload();
     setupThemeToggle();
     setupTabNavigation();
     setupEventListeners();

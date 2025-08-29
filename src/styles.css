@@ -474,14 +474,16 @@ body {
     gap: var(--spacing-xl);
 }
 
-.blog-post {
+.blog-post-card, /* New class for blog cards */
+.note-post-card { /* New class for note cards */
     padding: var(--spacing-xl);
     border: 1px solid var(--md-sys-color-outline-variant);
     border-radius: var(--radius-lg);
     background-color: var(--md-sys-color-surface);
 }
 
-.blog-post h3 {
+.blog-post-card .blog-content h3,
+.note-post-card .note-content h3 {
     font-family: var(--font-family-display);
     font-size: var(--font-size-2xl);
     font-weight: var(--font-weight-medium);
@@ -490,7 +492,8 @@ body {
     letter-spacing: -0.025em;
 }
 
-.blog-meta {
+.blog-post-card .blog-meta,
+.note-post-card .note-meta {
     font-family: var(--font-family-base);
     font-size: var(--font-size-sm);
     font-weight: var(--font-weight-normal);
@@ -498,7 +501,8 @@ body {
     margin-bottom: var(--spacing-md);
 }
 
-.blog-post p {
+.blog-post-card .blog-content p,
+.note-post-card .note-content p {
     font-family: var(--font-family-base);
     font-size: var(--font-size-base);
     font-weight: var(--font-weight-normal);
@@ -507,7 +511,7 @@ body {
     line-height: var(--line-height-relaxed);
 }
 
-.blog-actions {
+.blog-post-card .blog-actions {
     display: flex;
     gap: var(--spacing-md);
     align-items: center;
@@ -589,7 +593,7 @@ body {
 }
 
 /* 博客详情模态框 */
-.blog-modal {
+.markdown-modal { /* Changed class name */
     position: fixed;
     top: 0;
     left: 0;
@@ -604,7 +608,7 @@ body {
     transition: opacity 0.3s ease;
 }
 
-.blog-modal-content {
+.markdown-modal-content { /* Changed class name */
     background-color: var(--md-sys-color-surface);
     border-radius: var(--radius-lg);
     width: 90%;
@@ -616,7 +620,7 @@ body {
     overflow: hidden;
 }
 
-.blog-modal-header {
+.markdown-modal-header { /* Changed class name */
     padding: var(--spacing-xl);
     border-bottom: 1px solid var(--md-sys-color-outline-variant);
     display: flex;
@@ -625,7 +629,7 @@ body {
     position: relative;
 }
 
-.blog-modal-header h2 {
+.markdown-modal-header h2 { /* Changed class name */
     font-family: var(--font-family-display);
     font-size: var(--font-size-2xl);
     font-weight: var(--font-weight-semibold);
@@ -633,7 +637,7 @@ body {
     margin: 0;
 }
 
-#modal-meta {
+#markdown-modal-meta { /* Changed ID */
     font-family: var(--font-family-base);
     font-size: var(--font-size-sm);
     color: var(--md-sys-color-on-surface-variant);
@@ -660,19 +664,19 @@ body {
     background-color: var(--md-sys-color-surface-variant);
 }
 
-.blog-modal-body {
+.markdown-modal-body { /* Changed class name */
     padding: var(--spacing-xl);
     overflow-y: auto;
     flex: 1;
 }
 
 /* Markdown内容样式 */
-.blog-modal-body h1,
-.blog-modal-body h2,
-.blog-modal-body h3,
-.blog-modal-body h4,
-.blog-modal-body h5,
-.blog-modal-body h6 {
+.markdown-modal-body h1,
+.markdown-modal-body h2,
+.markdown-modal-body h3,
+.markdown-modal-body h4,
+.markdown-modal-body h5,
+.markdown-modal-body h6 {
     font-family: var(--font-family-display);
     font-weight: var(--font-weight-medium);
     color: var(--md-sys-color-on-surface);
@@ -680,21 +684,21 @@ body {
     margin-bottom: var(--spacing-md);
 }
 
-.blog-modal-body h1 {
+.markdown-modal-body h1 {
     font-size: var(--font-size-3xl);
     border-bottom: 1px solid var(--md-sys-color-outline-variant);
     padding-bottom: var(--spacing-md);
 }
 
-.blog-modal-body h2 {
+.markdown-modal-body h2 {
     font-size: var(--font-size-2xl);
 }
 
-.blog-modal-body h3 {
+.markdown-modal-body h3 {
     font-size: var(--font-size-xl);
 }
 
-.blog-modal-body p {
+.markdown-modal-body p {
     font-family: var(--font-family-base);
     font-size: var(--font-size-base);
     color: var(--md-sys-color-on-surface-variant);
@@ -702,8 +706,8 @@ body {
     line-height: var(--line-height-relaxed);
 }
 
-.blog-modal-body ul,
-.blog-modal-body ol {
+.markdown-modal-body ul,
+.markdown-modal-body ol {
     font-family: var(--font-family-base);
     font-size: var(--font-size-base);
     color: var(--md-sys-color-on-surface-variant);
@@ -711,16 +715,16 @@ body {
     padding-left: var(--spacing-xl);
 }
 
-.blog-modal-body li {
+.markdown-modal-body li {
     margin-bottom: var(--spacing-sm);
 }
 
-.blog-modal-body strong {
+.markdown-modal-body strong {
     font-weight: var(--font-weight-semibold);
     color: var(--md-sys-color-on-surface);
 }
 
-.blog-modal-body code {
+.markdown-modal-body code {
     font-family: var(--font-family-mono);
     font-size: var(--font-size-sm);
     background-color: var(--md-sys-color-surface-variant);
@@ -729,7 +733,7 @@ body {
     color: var(--md-sys-color-on-surface-variant);
 }
 
-.blog-modal-body pre {
+.markdown-modal-body pre {
     background-color: var(--md-sys-color-surface-variant);
     padding: var(--spacing-md);
     border-radius: var(--radius-md);
@@ -737,14 +741,17 @@ body {
     margin-bottom: var(--spacing-md);
 }
 
-.blog-modal-body pre code {
+.markdown-modal-body pre code {
     background-color: transparent;
     padding: 0;
 }
 
 /* 上传按钮样式 */
 .upload-container {
+    margin-top: var(--spacing-xl); /* Add space above the button */
     margin-bottom: var(--spacing-xl);
+    display: flex;
+    justify-content: center;
 }
 
 #upload-blog-button {
@@ -761,17 +768,17 @@ body {
 
 /* 响应式模态框 */
 @media (max-width: 768px) {
-    .blog-modal-content {
+    .markdown-modal-content {
         width: 95%;
         max-height: 95vh;
     }
     
-    .blog-modal-header,
-    .blog-modal-body {
+    .markdown-modal-header,
+    .markdown-modal-body {
         padding: var(--spacing-lg);
     }
     
-    .blog-modal-header h2 {
+    .markdown-modal-header h2 {
         font-size: var(--font-size-xl);
     }
 }
