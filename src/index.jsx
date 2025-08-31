@@ -41,10 +41,19 @@ async function loadBlogData() {
             blogData = {};
         }
     } else {
-        blogData = {};
+        // 如果是首次访问，添加一些示例数据
+        blogData = {
+            '测试博客文章': {
+                title: '测试博客文章',
+                date: '2024-01-15',
+                readTime: '2分钟阅读',
+                content: '# 测试博客文章\n\n这是一个测试用的 Markdown 文件，用来验证博客上传功能是否正常工作。\n\n## 功能测试\n\n- ✅ Markdown 解析\n- ✅ 文件上传到服务器\n- ✅ 本地存储\n- ✅ UI 更新\n\n## 技术栈\n\n- Material Design 3\n- Material Web Components\n- Vite + Express\n- 文件上传功能\n\n上传成功后，你应该能在博客列表中看到这篇文章！',
+                tags: ['技术', '测试', 'web开发']
+            }
+        };
     }
 
-    // Fetch blogs from server
+    // Try to fetch blogs from server (only works in development)
     try {
         const response = await fetch('/api/blogs');
         if (response.ok) {
@@ -59,10 +68,10 @@ async function loadBlogData() {
                 console.log('成功从服务器加载博客数据！');
             }
         } else {
-            console.error('从服务器加载博客数据失败:', response.statusText);
+            console.log('服务器不可用，使用本地数据');
         }
     } catch (error) {
-        console.error('获取博客数据失败:', error);
+        console.log('无法连接到服务器，使用本地数据 (GitHub Pages 模式)');
     }
 }
 
@@ -88,10 +97,18 @@ async function loadNoteData() {
             noteData = {};
         }
     } else {
-        noteData = {};
+        // 如果是首次访问，添加一些示例数据
+        noteData = {
+            '动物农场读书笔记': {
+                title: '动物农场读书笔记',
+                date: '2024-01-10',
+                content: '# 动物农场读书笔记\n\n## 总的介绍\n一本政治寓言\n\n## 一本借助寓言故事来揭露人类问题的书\n在看完乔治·奥维尔的《动物农场》之后，我真的佩服作者的勇气和写作技艺的精巧。他在序中也提到了，自己是想要这本书尽可能地被更多人读到，并且易于翻译，于是使用了寓言的故事，从动物的视角，来让更多人读懂。\n\n里面的讽刺都很精巧，不仅让人知道...',
+                tags: ['哲学', '文学', '政治', '读书笔记']
+            }
+        };
     }
 
-    // Fetch notes from server
+    // Try to fetch notes from server (only works in development)
     try {
         const response = await fetch('/api/notes');
         if (response.ok) {
@@ -106,10 +123,10 @@ async function loadNoteData() {
                 console.log('成功从服务器加载笔记数据！');
             }
         } else {
-            console.error('从服务器加载笔记数据失败:', response.statusText);
+            console.log('服务器不可用，使用本地数据');
         }
     } catch (error) {
-        console.error('获取笔记数据失败:', error);
+        console.log('无法连接到服务器，使用本地数据 (GitHub Pages 模式)');
     }
 }
 
@@ -688,24 +705,26 @@ function processBlogUpload(file, tags) {
             saveBlogData();
             addBlogToUI(title, dateStr, readTime, markdownContent.substring(0, 150) + '...', markdownContent, tags);
             
-            // 上传到后端
-            const formData = new FormData();
-            formData.append('file', file);
-            formData.append('tags', JSON.stringify(tags));
-            fetch('/api/upload-blog', {
-                method: 'POST',
-                body: formData
-            }).then(res => res.json())
-              .then(data => {
-                  console.log('服务器已保存文件:', data);
-                  // 更新标签过滤器UI
-                  updateAvailableTagsDisplay('blog-panel');
-                  updateAvailableTagsDisplay('note-panel');
-              })
-              .catch(error => {
-                  console.error('上传到服务器失败:', error);
-                  alert('上传到服务器失败，但已在本地添加。');
-              });
+            // 更新标签过滤器UI
+            updateAvailableTagsDisplay('blog-panel');
+            updateAvailableTagsDisplay('note-panel');
+            
+            // 尝试上传到后端（仅在开发环境中工作）
+            if (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1') {
+                const formData = new FormData();
+                formData.append('file', file);
+                formData.append('tags', JSON.stringify(tags));
+                fetch('/api/upload-blog', {
+                    method: 'POST',
+                    body: formData
+                }).then(res => res.json())
+                  .then(data => {
+                      console.log('服务器已保存文件:', data);
+                  })
+                  .catch(error => {
+                      console.log('开发服务器不可用，仅在本地保存');
+                  });
+            }
             
             console.log(`成功上传博客: ${title}, 标签: ${tags.join(', ')}`);
         } catch (error) {
@@ -745,24 +764,26 @@ function processNoteUpload(file, tags) {
             saveNoteData();
             addNoteToUI(title, dateStr, markdownContent.substring(0, 150) + '...', markdownContent, tags);
             
-            // 上传到后端
-            const formData = new FormData();
-            formData.append('file', file);
-            formData.append('tags', JSON.stringify(tags));
-            fetch('/api/upload-note', {
-                method: 'POST',
-                body: formData
-            }).then(res => res.json())
-              .then(data => {
-                  console.log('服务器已保存笔记文件:', data);
-                  // 更新标签过滤器UI
-                  updateAvailableTagsDisplay('blog-panel');
-                  updateAvailableTagsDisplay('note-panel');
-              })
-              .catch(error => {
-                  console.error('上传笔记到服务器失败:', error);
-                  alert('上传笔记到服务器失败，但已在本地添加。');
-              });
+            // 更新标签过滤器UI
+            updateAvailableTagsDisplay('blog-panel');
+            updateAvailableTagsDisplay('note-panel');
+            
+            // 尝试上传到后端（仅在开发环境中工作）
+            if (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1') {
+                const formData = new FormData();
+                formData.append('file', file);
+                formData.append('tags', JSON.stringify(tags));
+                fetch('/api/upload-note', {
+                    method: 'POST',
+                    body: formData
+                }).then(res => res.json())
+                  .then(data => {
+                      console.log('服务器已保存笔记文件:', data);
+                  })
+                  .catch(error => {
+                      console.log('开发服务器不可用，仅在本地保存');
+                  });
+            }
             
             console.log(`成功上传笔记: ${title}, 标签: ${tags.join(', ')}`);
         } catch (error) {

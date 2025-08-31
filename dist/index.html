@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Material Design Home Page</title>
+    <!-- Material 符号字体 -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&family=Noto+Sans+SC:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <!-- Typeface 字体 -->
+    <link rel="preconnect" href="https://rsms.me/">
+    <link rel="stylesheet" href="https://rsms.me/inter/inter.css">
+    <!-- 样式文件 -->
+    <!-- Material Web 组件 -->
+  <script type="module" crossorigin src="/assets/index-CrGrqIKB.js"></script>
+  <link rel="stylesheet" crossorigin href="/assets/index-BBPpnL9W.css">
+</head>
+<body>
+    <!-- 头部导航 -->
+    <header class="header">
+        <div class="header-content">
+            <div class="logo">易涛</div>
+            <nav>
+                <md-icon-button id="theme-toggle">
+                    <md-icon>dark_mode</md-icon>
+                </md-icon-button>
+            </nav>
+        </div>
+    </header>
+
+    <!-- 主要内容区域 -->
+    <main class="main-layout">
+        <!-- 左侧个人信息边栏 -->
+        <aside class="sidebar">
+            <div class="profile-section">
+                <!-- 头像 -->
+                <div class="avatar-container">
+                    <img src="/assets/avatar-CyDR4iYC.jpg" alt="易涛" class="avatar">
+                </div>
+                
+                <!-- 基本信息 -->
+                <div class="profile-info">
+                    <h2 class="profile-name">易涛🥰</h2>
+                    <p class="profile-title">不会户外的程序员不是好的化学生</p>
+                    <p class="profile-bio">
+                        热爱编程，专注于现代Web技术。喜欢创造优雅的用户界面和流畅的用户体验。
+                    </p>
+                </div>
+
+                <!-- 社交媒体链接 -->
+                <div class="social-links">
+                    <md-icon-button class="social-link" title="GitHub">
+                        <md-icon>code</md-icon>
+                    </md-icon-button>
+                    <md-icon-button class="social-link" title="LinkedIn">
+                        <md-icon>work</md-icon>
+                    </md-icon-button>
+                    <md-icon-button class="social-link" title="Twitter">
+                        <md-icon>flutter_dash</md-icon>
+                    </md-icon-button>
+                    <md-icon-button class="social-link" title="Email">
+                        <md-icon>email</md-icon>
+                    </md-icon-button>
+                </div>
+
+                <!-- 技能标签 -->
+                <div class="skills-section">
+                    <h3>技能专长</h3>
+                    <div class="skills-grid">
+                        <md-assist-chip>JavaScript</md-assist-chip>
+                        <md-assist-chip>React</md-assist-chip>
+                        <md-assist-chip>Vue.js</md-assist-chip>
+                        <md-assist-chip>Node.js</md-assist-chip>
+                        <md-assist-chip>TypeScript</md-assist-chip>
+                        <md-assist-chip>Python</md-assist-chip>
+                    </div>
+                </div>
+            </div>
+        </aside>
+
+        <!-- 右侧主要内容区域 -->
+        <div class="content-area">
+            <!-- 导航标签 -->
+            <nav class="tab-navigation">
+                <div class="tab-buttons">
+                    <md-outlined-button class="tab-button" data-tab="work">
+                        <md-icon slot="icon">work</md-icon>
+                        作品
+                    </md-outlined-button>
+                    <md-outlined-button class="tab-button" data-tab="note">
+                        <md-icon slot="icon">note</md-icon>
+                        笔记
+                    </md-outlined-button>
+                    <md-outlined-button class="tab-button" data-tab="blog">
+                        <md-icon slot="icon">article</md-icon>
+                        博客
+                    </md-outlined-button>
+                </div>
+            </nav>
+
+            <!-- 标签页内容 -->
+            <div class="tab-content">
+                <!-- Work 标签页 -->
+                <div class="tab-panel active" id="work-panel">
+                    <h2>我的作品</h2>
+                    <div class="projects-grid">
+                        <!-- 项目卡片 1 -->
+                        <md-outlined-card>
+                            <div class="project-content">
+                                <h3>Chemistry Lab Safety Quiz </h3>
+                                <p>A quiz website for chemical safety test</p>
+                                <div class="project-tags">
+                                    <md-suggestion-chip>html</md-suggestion-chip>
+                                </div>
+                                <md-filled-button style="min-width: 120px;" onclick="window.open('https://github.com/11111tao/ChemistryLabSafetyQuiz')">
+                                    <md-icon slot="icon">launch</md-icon>
+                                    查看项目
+                                </md-filled-button>
+                            </div>
+                        </md-outlined-card>
+
+                        <!-- 项目卡片 2 -->
+                        <md-outlined-card>
+                            <div class="project-content">
+                                <h3>个人主页</h3>
+                                <p>使用material design 3 设计风格构建的个人主页</p>
+                                <div class="project-tags">
+                                    <md-suggestion-chip>html</md-suggestion-chip>
+                                    <md-suggestion-chip>css</md-suggestion-chip>
+                                    <md-suggestion-chip>javascript</md-suggestion-chip>
+                                    <md-suggestion-chip>material design 3</md-suggestion-chip>
+
+                                </div>
+                                <md-filled-button style="min-width: 120px;" onclick="window.open('https://github.com/11111tao/11111tao.github.io')">
+                                    <md-icon slot="icon">launch</md-icon>
+                                    查看项目
+                                </md-filled-button>
+                            </div>
+                        </md-outlined-card>
+
+                        
+                    </div>
+                </div>
+
+                <!-- Note 标签页 -->
+                <div class="tab-panel" id="note-panel">
+                    <h2>学习笔记</h2>
+                    <div class="notes-grid">
+                    </div>
+                </div>
+
+                <!-- Blog 标签页 -->
+                <div class="tab-panel" id="blog-panel">
+                    <h2>博客</h2>
+                    <div class="blog-posts">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+</body>
+</html>
