@@ -5,6 +5,8 @@ import '@material/web/all.js';
 let marked = null;
 let blogData = {};
 let noteData = {}; // Added for notes
+let currentTags = []; // 当前选择的标签（用于上传时）
+let activeFilter = null; // 当前激活的标签过滤器
 
 // 加载 Markdown 解析器
 function loadMarkedLibrary() {
@@ -185,9 +187,19 @@ function showBlogDetails(blogTitle) {
 }
 
 // 添加新博客到UI
-function addBlogToUI(title, date, readTime, excerpt, content) {
+function addBlogToUI(title, date, readTime, excerpt, content, tags = []) {
     const blogPosts = document.querySelector('.blog-posts');
     if (!blogPosts) return;
+    
+    // 如果有活跃的标签过滤器，检查是否匹配
+    if (activeFilter && (!tags || !tags.includes(activeFilter))) {
+        return; // 不显示不匹配的项目
+    }
+    
+    const tagsHtml = tags && tags.length > 0 ? 
+        `<div class="blog-tags">
+            ${tags.map(tag => `<button class="content-tag" onclick="filterByTag('${tag}')">${tag}</button>`).join('')}
+        </div>` : '';
     
     const newBlog = document.createElement('md-outlined-card'); // Use md-outlined-card for consistency
     newBlog.className = 'blog-post-card'; // A new class for consistent styling
@@ -196,6 +208,7 @@ function addBlogToUI(title, date, readTime, excerpt, content) {
             <h3>${title}</h3>
             <p class="blog-meta">${date} • ${readTime}</p>
             <p>${excerpt}</p>
+            ${tagsHtml}
             <div class="blog-actions">
                 <md-filled-button onclick="showBlogDetails('${title}')" style="width: 150px;">
                     <md-icon slot="icon">read_more</md-icon>
@@ -212,9 +225,19 @@ function addBlogToUI(title, date, readTime, excerpt, content) {
 }
 
 // 添加新笔记到UI
-function addNoteToUI(title, date, excerpt, content) {
+function addNoteToUI(title, date, excerpt, content, tags = []) {
     const notesGrid = document.querySelector('.notes-grid');
     if (!notesGrid) return;
+
+    // 如果有活跃的标签过滤器，检查是否匹配
+    if (activeFilter && (!tags || !tags.includes(activeFilter))) {
+        return; // 不显示不匹配的项目
+    }
+    
+    const tagsHtml = tags && tags.length > 0 ? 
+        `<div class="note-tags">
+            ${tags.map(tag => `<button class="content-tag" onclick="filterByTag('${tag}')">${tag}</button>`).join('')}
+        </div>` : '';
 
     const newNote = document.createElement('md-outlined-card'); // Use md-outlined-card for consistency
     newNote.className = 'note-post-card'; // A new class for consistent styling
@@ -223,6 +246,7 @@ function addNoteToUI(title, date, excerpt, content) {
             <h3>${title}</h3>
             <p class="note-meta">${date}</p>
             <p>${excerpt}</p>
+            ${tagsHtml}
             <div class="blog-actions">
                 <md-filled-button onclick="showNoteDetails('${title}')" style="width: 150px;">
                     <md-icon slot="icon">read_more</md-icon>
@@ -255,10 +279,174 @@ function toggleFavorite(button) {
     }
 }
 
+// 标签管理功能
+function addTag(tag) {
+    const trimmedTag = tag.trim();
+    if (trimmedTag && !currentTags.includes(trimmedTag)) {
+        currentTags.push(trimmedTag);
+        updateTagsDisplay();
+    }
+}
+
+function removeTag(tag) {
+    const index = currentTags.indexOf(tag);
+    if (index > -1) {
+        currentTags.splice(index, 1);
+        updateTagsDisplay();
+    }
+}
+
+function clearCurrentTags() {
+    currentTags = [];
+    updateTagsDisplay();
+}
+
+function updateTagsDisplay() {
+    const tagsDisplay = document.querySelector('.tags-display');
+    if (!tagsDisplay) return;
+    
+    tagsDisplay.innerHTML = '';
+    currentTags.forEach(tag => {
+        const tagChip = document.createElement('span');
+        tagChip.className = 'tag-chip';
+        tagChip.innerHTML = `
+            ${tag}
+            <button class="remove-tag" onclick="removeTag('${tag}')" aria-label="移除标签">×</button>
+        `;
+        tagsDisplay.appendChild(tagChip);
+    });
+}
+
+// 获取所有可用的标签
+function getAllAvailableTags() {
+    const allTags = new Set();
+    
+    // 从博客数据中收集标签
+    Object.values(blogData).forEach(blog => {
+        if (blog.tags && Array.isArray(blog.tags)) {
+            blog.tags.forEach(tag => allTags.add(tag));
+        }
+    });
+    
+    // 从笔记数据中收集标签
+    Object.values(noteData).forEach(note => {
+        if (note.tags && Array.isArray(note.tags)) {
+            note.tags.forEach(tag => allTags.add(tag));
+        }
+    });
+    
+    return Array.from(allTags).sort();
+}
+
+// 根据标签过滤内容
+function filterByTag(tag) {
+    activeFilter = tag;
+    renderBlogList();
+    renderNoteList();
+    updateTagFilterDisplay();
+}
+
+// 清除标签过滤
+function clearTagFilter() {
+    activeFilter = null;
+    renderBlogList();
+    renderNoteList();
+    updateTagFilterDisplay();
+}
+
+// 更新标签过滤器显示
+function updateTagFilterDisplay() {
+    const containers = document.querySelectorAll('.tag-filter-container');
+    containers.forEach(container => {
+        const activeTagSpan = container.querySelector('.active-filter-tag');
+        if (activeFilter) {
+            if (!activeTagSpan) {
+                const filterInfo = document.createElement('div');
+                filterInfo.className = 'active-filter-info';
+                filterInfo.innerHTML = `
+                    <span>正在显示标签: </span>
+                    <span class="active-filter-tag">${activeFilter}</span>
+                `;
+                container.querySelector('.tag-filter-header').appendChild(filterInfo);
+            } else {
+                activeTagSpan.textContent = activeFilter;
+            }
+        } else {
+            const filterInfo = container.querySelector('.active-filter-info');
+            if (filterInfo) {
+                filterInfo.remove();
+            }
+        }
+    });
+}
+
+// 创建标签过滤器UI
+function createTagFilterUI(panelId) {
+    const panel = document.getElementById(panelId);
+    if (!panel) return;
+    
+    // 检查是否已经存在过滤器
+    if (panel.querySelector('.tag-filter-container')) return;
+    
+    const filterContainer = document.createElement('div');
+    filterContainer.className = 'tag-filter-container';
+    filterContainer.innerHTML = `
+        <div class="tag-filter-header">
+            <h4>按标签筛选</h4>
+            <button class="clear-filter-button" onclick="clearTagFilter()">清除筛选</button>
+        </div>
+        <div class="available-tags"></div>
+    `;
+    
+    // 插入到标题后面
+    const title = panel.querySelector('h2');
+    if (title) {
+        title.after(filterContainer);
+    } else {
+        panel.insertBefore(filterContainer, panel.firstChild);
+    }
+    
+    updateAvailableTagsDisplay(panelId);
+}
+
+// 更新可用标签显示
+function updateAvailableTagsDisplay(panelId) {
+    const panel = document.getElementById(panelId);
+    if (!panel) return;
+    
+    const availableTagsContainer = panel.querySelector('.available-tags');
+    if (!availableTagsContainer) return;
+    
+    const allTags = getAllAvailableTags();
+    availableTagsContainer.innerHTML = '';
+    
+    if (allTags.length === 0) {
+        availableTagsContainer.innerHTML = '<span style="color: var(--md-sys-color-on-surface-variant); font-size: var(--font-size-sm);">暂无标签</span>';
+        return;
+    }
+    
+    allTags.forEach(tag => {
+        const tagButton = document.createElement('button');
+        tagButton.className = `content-tag ${activeFilter === tag ? 'active' : ''}`;
+        tagButton.textContent = tag;
+        tagButton.onclick = () => filterByTag(tag);
+        availableTagsContainer.appendChild(tagButton);
+    });
+}
+
 // Make functions globally accessible for inline onclick handlers
 window.showBlogDetails = showBlogDetails;
 window.showNoteDetails = showNoteDetails;
 window.toggleFavorite = toggleFavorite;
+window.addTag = addTag;
+window.removeTag = removeTag;
+window.clearCurrentTags = clearCurrentTags;
+window.filterByTag = filterByTag;
+window.clearTagFilter = clearTagFilter;
+window.addTagFromInput = addTagFromInput;
+window.removeTagAndUpdate = removeTagAndUpdate;
+window.cancelUpload = cancelUpload;
+window.confirmUpload = confirmUpload;
 
 // 渲染博客列表
 function renderBlogList() {
@@ -276,7 +464,7 @@ function renderBlogList() {
     Object.keys(blogData).forEach(title => {
         const blog = blogData[title];
         const excerpt = blog.content.substring(0, 150) + '...';
-        addBlogToUI(title, blog.date, blog.readTime, excerpt, blog.content);
+        addBlogToUI(title, blog.date, blog.readTime, excerpt, blog.content, blog.tags || []);
     });
 }
 
@@ -296,8 +484,293 @@ function renderNoteList() {
     Object.keys(noteData).forEach(title => {
         const note = noteData[title];
         const excerpt = note.content.substring(0, 150) + '...';
-        addNoteToUI(title, note.date, excerpt, note.content);
+        addNoteToUI(title, note.date, excerpt, note.content, note.tags || []);
     });
+}
+
+// 创建上传模态框
+function createUploadModal(type) {
+    const modal = document.createElement('div');
+    modal.className = 'upload-modal';
+    modal.id = `upload-${type}-modal`;
+    modal.style.display = 'none';
+    
+    modal.innerHTML = `
+        <div class="upload-modal-content">
+            <div class="upload-modal-header">
+                <h3>上传${type === 'blog' ? '博客' : '笔记'}</h3>
+                <button id="close-upload-${type}-modal" class="close-button">
+                    <md-icon>close</md-icon>
+                </button>
+            </div>
+            <div class="upload-modal-body">
+                <div class="file-info">
+                    <h4>文件信息</h4>
+                    <p id="file-name-${type}">未选择文件</p>
+                    <p id="file-size-${type}"></p>
+                </div>
+                <div class="tag-input-container">
+                    <h4>添加标签</h4>
+                    <div class="tag-input-section">
+                        <input type="text" class="tag-input" id="tag-input-${type}" placeholder="输入标签名，如：philosophy, exercise">
+                        <md-filled-button class="add-tag-button" onclick="addTagFromInput('${type}')">
+                            <md-icon slot="icon">add</md-icon>
+                            添加
+                        </md-filled-button>
+                    </div>
+                    <div class="tags-display" id="tags-display-${type}"></div>
+                </div>
+            </div>
+            <div class="upload-modal-actions">
+                <md-outlined-button onclick="cancelUpload('${type}')">
+                    <md-icon slot="icon">cancel</md-icon>
+                    取消
+                </md-outlined-button>
+                <md-filled-button onclick="confirmUpload('${type}')" id="confirm-upload-${type}">
+                    <md-icon slot="icon">upload</md-icon>
+                    确认上传
+                </md-filled-button>
+            </div>
+        </div>
+    `;
+    
+    document.body.appendChild(modal);
+    
+    // 设置事件监听器
+    document.getElementById(`close-upload-${type}-modal`).addEventListener('click', () => {
+        cancelUpload(type);
+    });
+    
+    // 点击模态框外部关闭
+    modal.addEventListener('click', (event) => {
+        if (event.target === modal) {
+            cancelUpload(type);
+        }
+    });
+    
+    // Enter键添加标签
+    document.getElementById(`tag-input-${type}`).addEventListener('keypress', (event) => {
+        if (event.key === 'Enter') {
+            addTagFromInput(type);
+        }
+    });
+}
+
+// 从输入框添加标签
+function addTagFromInput(type) {
+    const input = document.getElementById(`tag-input-${type}`);
+    const tag = input.value.trim();
+    if (tag) {
+        addTag(tag);
+        input.value = '';
+        updateTagsDisplayInModal(type);
+    }
+}
+
+// 更新模态框中的标签显示
+function updateTagsDisplayInModal(type) {
+    const tagsDisplay = document.getElementById(`tags-display-${type}`);
+    if (!tagsDisplay) return;
+    
+    tagsDisplay.innerHTML = '';
+    currentTags.forEach(tag => {
+        const tagChip = document.createElement('span');
+        tagChip.className = 'tag-chip';
+        tagChip.innerHTML = `
+            ${tag}
+            <button class="remove-tag" onclick="removeTagAndUpdate('${tag}', '${type}')" aria-label="移除标签">×</button>
+        `;
+        tagsDisplay.appendChild(tagChip);
+    });
+}
+
+// 移除标签并更新模态框显示
+function removeTagAndUpdate(tag, type) {
+    removeTag(tag);
+    updateTagsDisplayInModal(type);
+}
+
+// 存储待上传的文件信息
+let pendingUpload = {
+    file: null,
+    type: null
+};
+
+// 显示上传模态框
+function showUploadModal(file, type) {
+    pendingUpload = { file, type };
+    clearCurrentTags();
+    
+    const modal = document.getElementById(`upload-${type}-modal`);
+    if (!modal) return;
+    
+    // 更新文件信息
+    document.getElementById(`file-name-${type}`).textContent = file.name;
+    document.getElementById(`file-size-${type}`).textContent = `大小: ${(file.size / 1024).toFixed(1)} KB`;
+    
+    // 显示模态框
+    modal.style.display = 'flex';
+    document.body.classList.add('modal-open');
+    
+    // 聚焦到标签输入框
+    setTimeout(() => {
+        document.getElementById(`tag-input-${type}`).focus();
+    }, 100);
+}
+
+// 取消上传
+function cancelUpload(type) {
+    const modal = document.getElementById(`upload-${type}-modal`);
+    if (modal) {
+        modal.style.display = 'none';
+        document.body.classList.remove('modal-open');
+    }
+    
+    pendingUpload = { file: null, type: null };
+    clearCurrentTags();
+    
+    // 清空文件输入框
+    const fileInput = document.getElementById(`${type}-file-input`);
+    if (fileInput) {
+        fileInput.value = '';
+    }
+}
+
+// 确认上传
+function confirmUpload(type) {
+    if (!pendingUpload.file) return;
+    
+    const modal = document.getElementById(`upload-${type}-modal`);
+    if (modal) {
+        modal.style.display = 'none';
+        document.body.classList.remove('modal-open');
+    }
+    
+    if (type === 'blog') {
+        processBlogUpload(pendingUpload.file, currentTags.slice());
+    } else if (type === 'note') {
+        processNoteUpload(pendingUpload.file, currentTags.slice());
+    }
+    
+    pendingUpload = { file: null, type: null };
+    clearCurrentTags();
+}
+
+// 处理博客上传
+function processBlogUpload(file, tags) {
+    const reader = new FileReader();
+    reader.onload = (e) => {
+        try {
+            const markdownContent = e.target.result;
+            
+            // 提取标题
+            const lines = markdownContent.split('\n');
+            let title = '新上传的博客';
+            if (lines.length > 0 && lines[0].startsWith('# ')) {
+                title = lines[0].substring(2).trim();
+            }
+            
+            // 生成日期和阅读时间
+            const today = new Date();
+            const dateStr = `${today.getFullYear()}-${String(today.getMonth() + 1).padStart(2, '0')}-${String(today.getDate()).padStart(2, '0')}`;
+            const wordCount = markdownContent.split(/\s+/).length;
+            const readTime = `${Math.ceil(wordCount / 200)}分钟阅读`;
+            
+            // 保存博客数据（包含标签）
+            blogData[title] = {
+                title: title,
+                date: dateStr,
+                readTime: readTime,
+                content: markdownContent,
+                tags: tags
+            };
+            
+            saveBlogData();
+            addBlogToUI(title, dateStr, readTime, markdownContent.substring(0, 150) + '...', markdownContent, tags);
+            
+            // 上传到后端
+            const formData = new FormData();
+            formData.append('file', file);
+            formData.append('tags', JSON.stringify(tags));
+            fetch('/api/upload-blog', {
+                method: 'POST',
+                body: formData
+            }).then(res => res.json())
+              .then(data => {
+                  console.log('服务器已保存文件:', data);
+                  // 更新标签过滤器UI
+                  updateAvailableTagsDisplay('blog-panel');
+                  updateAvailableTagsDisplay('note-panel');
+              })
+              .catch(error => {
+                  console.error('上传到服务器失败:', error);
+                  alert('上传到服务器失败，但已在本地添加。');
+              });
+            
+            console.log(`成功上传博客: ${title}, 标签: ${tags.join(', ')}`);
+        } catch (error) {
+            console.error('上传文件失败:', error);
+            alert('上传文件失败，请检查文件格式。');
+        }
+    };
+    reader.readAsText(file);
+}
+
+// 处理笔记上传
+function processNoteUpload(file, tags) {
+    const reader = new FileReader();
+    reader.onload = (e) => {
+        try {
+            const markdownContent = e.target.result;
+            
+            // 提取标题
+            const lines = markdownContent.split('\n');
+            let title = '新上传的笔记';
+            if (lines.length > 0 && lines[0].startsWith('# ')) {
+                title = lines[0].substring(2).trim();
+            }
+            
+            // 生成日期
+            const today = new Date();
+            const dateStr = `${today.getFullYear()}-${String(today.getMonth() + 1).padStart(2, '0')}-${String(today.getDate()).padStart(2, '0')}`;
+            
+            // 保存笔记数据（包含标签）
+            noteData[title] = {
+                title: title,
+                date: dateStr,
+                content: markdownContent,
+                tags: tags
+            };
+            
+            saveNoteData();
+            addNoteToUI(title, dateStr, markdownContent.substring(0, 150) + '...', markdownContent, tags);
+            
+            // 上传到后端
+            const formData = new FormData();
+            formData.append('file', file);
+            formData.append('tags', JSON.stringify(tags));
+            fetch('/api/upload-note', {
+                method: 'POST',
+                body: formData
+            }).then(res => res.json())
+              .then(data => {
+                  console.log('服务器已保存笔记文件:', data);
+                  // 更新标签过滤器UI
+                  updateAvailableTagsDisplay('blog-panel');
+                  updateAvailableTagsDisplay('note-panel');
+              })
+              .catch(error => {
+                  console.error('上传笔记到服务器失败:', error);
+                  alert('上传笔记到服务器失败，但已在本地添加。');
+              });
+            
+            console.log(`成功上传笔记: ${title}, 标签: ${tags.join(', ')}`);
+        } catch (error) {
+            console.error('上传笔记文件失败:', error);
+            alert('上传笔记文件失败，请检查文件格式。');
+        }
+    };
+    reader.readAsText(file);
 }
 
 // 博客上传功能
@@ -338,55 +811,7 @@ function setupBlogUpload() {
         const file = event.target.files[0];
         if (!file) return;
         
-        const reader = new FileReader();
-        reader.onload = (e) => {
-            try {
-                const markdownContent = e.target.result;
-                
-                // 提取标题
-                const lines = markdownContent.split('\n');
-                let title = '新上传的博客';
-                if (lines.length > 0 && lines[0].startsWith('# ')) {
-                    title = lines[0].substring(2).trim();
-                }
-                
-                // 生成日期和阅读时间
-                const today = new Date();
-                const dateStr = `${today.getFullYear()}-${String(today.getMonth() + 1).padStart(2, '0')}-${String(today.getDate()).padStart(2, '0')}`;
-                const wordCount = markdownContent.split(/\s+/).length;
-                const readTime = `${Math.ceil(wordCount / 200)}分钟阅读`;
-                
-                // 保存博客数据
-                blogData[title] = {
-                    title: title,
-                    date: dateStr,
-                    readTime: readTime,
-                    content: markdownContent
-                };
-                
-                saveBlogData();
-                addBlogToUI(title, dateStr, readTime, markdownContent.substring(0, 150) + '...', markdownContent);
-                
-                // 上传到后端
-                const formData = new FormData();
-                formData.append('file', file);
-                fetch('/api/upload-blog', {
-                    method: 'POST',
-                    body: formData
-                }).then(res => res.json())
-                  .then(data => console.log('服务器已保存文件:', data))
-                  .catch(error => {
-                      console.error('上传到服务器失败:', error);
-                      alert('上传到服务器失败，但已在本地添加。');
-                  });
-                
-                console.log(`成功上传博客: ${title}`);
-            } catch (error) {
-                console.error('上传文件失败:', error);
-                alert('上传文件失败，请检查文件格式。');
-            }
-        };
-        reader.readAsText(file);
+        showUploadModal(file, 'blog');
     });
 }
 
@@ -427,52 +852,7 @@ function setupNoteUpload() {
         const file = event.target.files[0];
         if (!file) return;
 
-        const reader = new FileReader();
-        reader.onload = (e) => {
-            try {
-                const markdownContent = e.target.result;
-
-                // 提取标题
-                const lines = markdownContent.split('\n');
-                let title = '新上传的笔记';
-                if (lines.length > 0 && lines[0].startsWith('# ')) {
-                    title = lines[0].substring(2).trim();
-                }
-
-                // 生成日期
-                const today = new Date();
-                const dateStr = `${today.getFullYear()}-${String(today.getMonth() + 1).padStart(2, '0')}-${String(today.getDate()).padStart(2, '0')}`;
-
-                // 保存笔记数据
-                noteData[title] = {
-                    title: title,
-                    date: dateStr,
-                    content: markdownContent
-                };
-
-                saveNoteData();
-                addNoteToUI(title, dateStr, markdownContent.substring(0, 150) + '...', markdownContent);
-
-                // Optionally, upload to backend if a /api/upload endpoint for notes exists
-                const formData = new FormData();
-                formData.append('file', file);
-                fetch('/api/upload-note', {
-                    method: 'POST',
-                    body: formData
-                }).then(res => res.json())
-                  .then(data => console.log('服务器已保存笔记文件:', data))
-                  .catch(error => {
-                      console.error('上传笔记到服务器失败:', error);
-                      alert('上传笔记到服务器失败，但已在本地添加。');
-                  });
-
-                console.log(`成功上传笔记: ${title}`);
-            } catch (error) {
-                console.error('上传笔记文件失败:', error);
-                alert('上传笔记文件失败，请检查文件格式。');
-            }
-        };
-        reader.readAsText(file);
+        showUploadModal(file, 'note');
     });
 }
 
@@ -595,6 +975,10 @@ function initializeApp() {
     // loadBlogData(); 
     // renderBlogList();
     createMarkdownModal(); // Changed to createMarkdownModal
+    createUploadModal('blog'); // Create blog upload modal
+    createUploadModal('note'); // Create note upload modal
+    createTagFilterUI('blog-panel'); // Create tag filters for blog panel
+    createTagFilterUI('note-panel'); // Create tag filters for note panel
     setupBlogUpload();
     setupNoteUpload();
     setupThemeToggle();
