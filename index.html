@@ -17,6 +17,26 @@
     <link rel="stylesheet" href="/src/styles.css">
     <!-- Material Web 组件 -->
     <script type="module" src="/src/index.jsx"></script>
+    
+    <!-- 调试脚本 -->
+    <script>
+        // 检查 Material Web 组件是否正确加载
+        window.addEventListener('DOMContentLoaded', () => {
+            console.log('DOM 已加载');
+            setTimeout(() => {
+                const buttons = document.querySelectorAll('md-filled-button, md-outlined-button');
+                console.log(`找到 ${buttons.length} 个 Material 按钮`);
+                
+                if (buttons.length === 0) {
+                    console.error('未找到 Material Web 组件！可能存在加载问题。');
+                } else {
+                    buttons.forEach((btn, index) => {
+                        console.log(`按钮 ${index}:`, btn.tagName, btn.textContent);
+                    });
+                }
+            }, 2000);
+        });
+    </script>
 </head>
 <body>
     <!-- 头部导航 -->

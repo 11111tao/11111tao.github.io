@@ -1,6 +1,35 @@
 // Material Web 组件引入
 import '@material/web/all.js';
 
+// 确保 Material Web 组件在 DOM 加载后注册
+if (typeof window !== 'undefined') {
+    // 等待组件定义完成
+    const ensureComponentsLoaded = async () => {
+        const componentNames = [
+            'md-filled-button',
+            'md-outlined-button',
+            'md-text-button',
+            'md-icon-button',
+            'md-icon',
+            'md-outlined-card',
+            'md-assist-chip',
+            'md-suggestion-chip'
+        ];
+        
+        for (const name of componentNames) {
+            if (!customElements.get(name)) {
+                await customElements.whenDefined(name);
+            }
+        }
+    };
+    
+    ensureComponentsLoaded().then(() => {
+        console.log('所有 Material Web 组件已加载完成');
+    }).catch((error) => {
+        console.warn('Material Web 组件加载出现问题:', error);
+    });
+}
+
 // 全局变量
 let marked = null;
 let blogData = {};
@@ -975,36 +1004,61 @@ function setupEventListeners() {
 
 // 主函数
 function initializeApp() {
-    console.log('Material Web 组件加载成功！');
+    console.log('开始初始化应用程序...');
     
-    // 加载 marked 库
-    loadMarkedLibrary()
-        .then((markedInstance) => {
-            marked = markedInstance;
-            console.log('Markdown解析器加载成功！');
-            // Once marked is loaded, then load data and render
-            loadBlogData();
-            loadNoteData();
-            renderBlogList();
-            renderNoteList();
-        })
-        .catch((error) => {
-            console.error('加载Markdown解析器失败:', error);
-        });
+    // 检查 Material Web 组件是否可用
+    const checkMaterialComponents = () => {
+        const testElement = document.createElement('md-filled-button');
+        return testElement.tagName.toLowerCase() === 'md-filled-button';
+    };
     
-    // 初始化功能 (moved inside .then block for marked loading)
-    // loadBlogData(); 
-    // renderBlogList();
-    createMarkdownModal(); // Changed to createMarkdownModal
-    createUploadModal('blog'); // Create blog upload modal
-    createUploadModal('note'); // Create note upload modal
-    createTagFilterUI('blog-panel'); // Create tag filters for blog panel
-    createTagFilterUI('note-panel'); // Create tag filters for note panel
-    setupBlogUpload();
-    setupNoteUpload();
-    setupThemeToggle();
-    setupTabNavigation();
-    setupEventListeners();
+    const initializeCore = () => {
+        // 加载 marked 库
+        loadMarkedLibrary()
+            .then((markedInstance) => {
+                marked = markedInstance;
+                console.log('Markdown解析器加载成功！');
+                // Once marked is loaded, then load data and render
+                loadBlogData();
+                loadNoteData();
+                renderBlogList();
+                renderNoteList();
+            })
+            .catch((error) => {
+                console.error('加载Markdown解析器失败:', error);
+            });
+        
+        // 初始化功能
+        createMarkdownModal(); // Changed to createMarkdownModal
+        createUploadModal('blog'); // Create blog upload modal
+        createUploadModal('note'); // Create note upload modal
+        createTagFilterUI('blog-panel'); // Create tag filters for blog panel
+        createTagFilterUI('note-panel'); // Create tag filters for note panel
+        setupBlogUpload();
+        setupNoteUpload();
+        setupThemeToggle();
+        setupTabNavigation();
+        setupEventListeners();
+        
+        console.log('应用程序初始化完成！');
+    };
+    
+    // 等待 Material Web 组件加载或使用回退方案
+    if (checkMaterialComponents()) {
+        console.log('Material Web 组件已可用');
+        initializeCore();
+    } else {
+        console.log('等待 Material Web 组件加载...');
+        // 等待一小段时间让组件加载
+        setTimeout(() => {
+            if (checkMaterialComponents()) {
+                console.log('Material Web 组件延迟加载成功');
+            } else {
+                console.warn('Material Web 组件可能未正确加载，继续初始化');
+            }
+            initializeCore();
+        }, 1000);
+    }
 }
 
 // 等待 DOM 加载完成后初始化

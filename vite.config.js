@@ -11,5 +11,18 @@ export default defineConfig({
 				secure: false
 			}
 		}
+	},
+	build: {
+		target: 'es2015',
+		rollupOptions: {
+			external: [],
+			output: {
+				manualChunks: undefined
+			}
+		}
+	},
+	optimizeDeps: {
+		include: ['@material/web/all.js'],
+		exclude: []
 	}
 });
