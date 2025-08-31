@@ -704,34 +704,34 @@ function confirmUpload(type) {
 
 // 处理博客上传
 function processBlogUpload(file, tags) {
-    const reader = new FileReader();
-    reader.onload = (e) => {
-        try {
-            const markdownContent = e.target.result;
-            
-            // 提取标题
-            const lines = markdownContent.split('\n');
-            let title = '新上传的博客';
-            if (lines.length > 0 && lines[0].startsWith('# ')) {
-                title = lines[0].substring(2).trim();
-            }
-            
-            // 生成日期和阅读时间
-            const today = new Date();
-            const dateStr = `${today.getFullYear()}-${String(today.getMonth() + 1).padStart(2, '0')}-${String(today.getDate()).padStart(2, '0')}`;
-            const wordCount = markdownContent.split(/\s+/).length;
-            const readTime = `${Math.ceil(wordCount / 200)}分钟阅读`;
-            
+        const reader = new FileReader();
+        reader.onload = (e) => {
+            try {
+                const markdownContent = e.target.result;
+                
+                // 提取标题
+                const lines = markdownContent.split('\n');
+                let title = '新上传的博客';
+                if (lines.length > 0 && lines[0].startsWith('# ')) {
+                    title = lines[0].substring(2).trim();
+                }
+                
+                // 生成日期和阅读时间
+                const today = new Date();
+                const dateStr = `${today.getFullYear()}-${String(today.getMonth() + 1).padStart(2, '0')}-${String(today.getDate()).padStart(2, '0')}`;
+                const wordCount = markdownContent.split(/\s+/).length;
+                const readTime = `${Math.ceil(wordCount / 200)}分钟阅读`;
+                
             // 保存博客数据（包含标签）
-            blogData[title] = {
-                title: title,
-                date: dateStr,
-                readTime: readTime,
+                blogData[title] = {
+                    title: title,
+                    date: dateStr,
+                    readTime: readTime,
                 content: markdownContent,
                 tags: tags
-            };
-            
-            saveBlogData();
+                };
+                
+                saveBlogData();
             addBlogToUI(title, dateStr, readTime, markdownContent.substring(0, 150) + '...', markdownContent, tags);
             
             // 更新标签过滤器UI
@@ -754,43 +754,43 @@ function processBlogUpload(file, tags) {
                       console.log('开发服务器不可用，仅在本地保存');
                   });
             }
-            
+                
             console.log(`成功上传博客: ${title}, 标签: ${tags.join(', ')}`);
-        } catch (error) {
-            console.error('上传文件失败:', error);
-            alert('上传文件失败，请检查文件格式。');
-        }
-    };
-    reader.readAsText(file);
+            } catch (error) {
+                console.error('上传文件失败:', error);
+                alert('上传文件失败，请检查文件格式。');
+            }
+        };
+        reader.readAsText(file);
 }
 
 // 处理笔记上传
 function processNoteUpload(file, tags) {
-    const reader = new FileReader();
-    reader.onload = (e) => {
-        try {
-            const markdownContent = e.target.result;
-            
-            // 提取标题
-            const lines = markdownContent.split('\n');
-            let title = '新上传的笔记';
-            if (lines.length > 0 && lines[0].startsWith('# ')) {
-                title = lines[0].substring(2).trim();
-            }
-            
-            // 生成日期
-            const today = new Date();
-            const dateStr = `${today.getFullYear()}-${String(today.getMonth() + 1).padStart(2, '0')}-${String(today.getDate()).padStart(2, '0')}`;
-            
+        const reader = new FileReader();
+        reader.onload = (e) => {
+            try {
+                const markdownContent = e.target.result;
+
+                // 提取标题
+                const lines = markdownContent.split('\n');
+                let title = '新上传的笔记';
+                if (lines.length > 0 && lines[0].startsWith('# ')) {
+                    title = lines[0].substring(2).trim();
+                }
+
+                // 生成日期
+                const today = new Date();
+                const dateStr = `${today.getFullYear()}-${String(today.getMonth() + 1).padStart(2, '0')}-${String(today.getDate()).padStart(2, '0')}`;
+
             // 保存笔记数据（包含标签）
-            noteData[title] = {
-                title: title,
-                date: dateStr,
+                noteData[title] = {
+                    title: title,
+                    date: dateStr,
                 content: markdownContent,
                 tags: tags
-            };
-            
-            saveNoteData();
+                };
+
+                saveNoteData();
             addNoteToUI(title, dateStr, markdownContent.substring(0, 150) + '...', markdownContent, tags);
             
             // 更新标签过滤器UI
@@ -813,14 +813,14 @@ function processNoteUpload(file, tags) {
                       console.log('开发服务器不可用，仅在本地保存');
                   });
             }
-            
+
             console.log(`成功上传笔记: ${title}, 标签: ${tags.join(', ')}`);
-        } catch (error) {
-            console.error('上传笔记文件失败:', error);
-            alert('上传笔记文件失败，请检查文件格式。');
-        }
-    };
-    reader.readAsText(file);
+            } catch (error) {
+                console.error('上传笔记文件失败:', error);
+                alert('上传笔记文件失败，请检查文件格式。');
+            }
+        };
+        reader.readAsText(file);
 }
 
 // 检查是否为本地开发环境
@@ -1032,21 +1032,21 @@ function initializeApp() {
     };
     
     const initializeCore = () => {
-        // 加载 marked 库
-        loadMarkedLibrary()
-            .then((markedInstance) => {
-                marked = markedInstance;
-                console.log('Markdown解析器加载成功！');
-                // Once marked is loaded, then load data and render
-                loadBlogData();
-                loadNoteData();
-                renderBlogList();
-                renderNoteList();
-            })
-            .catch((error) => {
-                console.error('加载Markdown解析器失败:', error);
-            });
-        
+    // 加载 marked 库
+    loadMarkedLibrary()
+        .then((markedInstance) => {
+            marked = markedInstance;
+            console.log('Markdown解析器加载成功！');
+            // Once marked is loaded, then load data and render
+            loadBlogData();
+            loadNoteData();
+            renderBlogList();
+            renderNoteList();
+        })
+        .catch((error) => {
+            console.error('加载Markdown解析器失败:', error);
+        });
+    
             // 初始化功能
     createMarkdownModal(); // Changed to createMarkdownModal
     
