@@ -1678,33 +1678,87 @@ var ea=Object.defineProperty,ta=Object.defineProperties;var ra=Object.getOwnProp
  * @license
  * Copyright 2021 Google LLC
  * SPDX-License-Identifier: Apache-2.0
- */let Zr=class extends Zn{constructor(){super(...arguments),this.fieldTag=j`md-outlined-field`}};Zr.styles=[Fi,Xn];Zr=n([g("md-outlined-text-field")],Zr);typeof window!="undefined"&&k(Qi,null,function*(){const e=["md-filled-button","md-outlined-button","md-text-button","md-icon-button","md-icon","md-outlined-card","md-assist-chip","md-suggestion-chip"];for(const t of e)customElements.get(t)||(yield customElements.whenDefined(t))}).then(()=>{console.log("所有 Material Web 组件已加载完成")}).catch(e=>{console.warn("Material Web 组件加载出现问题:",e)});let Jr=null,Z={},J={},he=[],ae=null;function Jn(){return new Promise((o,e)=>{const t=document.createElement("script");t.src="https://cdn.jsdelivr.net/npm/marked/marked.min.js",t.onload=()=>o(window.marked),t.onerror=e,document.head.appendChild(t)})}function Hi(){try{localStorage.setItem("blogData",JSON.stringify(Z)),console.log("成功保存博客数据到 localStorage")}catch(o){console.error("保存博客数据失败:",o)}}function Qn(){return k(this,null,function*(){const o=localStorage.getItem("blogData");if(o)try{Z=JSON.parse(o),console.log("成功从 localStorage 加载博客数据")}catch(e){console.error("解析 localStorage 数据失败:",e),Z={}}else Z={测试博客文章:{title:"测试博客文章",date:"2024-01-15",readTime:"2分钟阅读",content:`# 测试博客文章
+ */let Zr=class extends Zn{constructor(){super(...arguments),this.fieldTag=j`md-outlined-field`}};Zr.styles=[Fi,Xn];Zr=n([g("md-outlined-text-field")],Zr);typeof window!="undefined"&&k(Qi,null,function*(){const e=["md-filled-button","md-outlined-button","md-text-button","md-icon-button","md-icon","md-outlined-card","md-assist-chip","md-suggestion-chip"];for(const t of e)customElements.get(t)||(yield customElements.whenDefined(t))}).then(()=>{console.log("所有 Material Web 组件已加载完成")}).catch(e=>{console.warn("Material Web 组件加载出现问题:",e)});let Jr=null,Z={},J={},he=[],ae=null;function Jn(){return new Promise((o,e)=>{const t=document.createElement("script");t.src="https://cdn.jsdelivr.net/npm/marked/marked.min.js",t.onload=()=>o(window.marked),t.onerror=e,document.head.appendChild(t)})}function Hi(){try{localStorage.setItem("blogData",JSON.stringify(Z)),console.log("成功保存博客数据到 localStorage")}catch(o){console.error("保存博客数据失败:",o)}}function Qn(){return k(this,null,function*(){const o=localStorage.getItem("blogData");if(o)try{Z=JSON.parse(o),console.log("成功从 localStorage 加载博客数据")}catch(e){console.error("解析 localStorage 数据失败:",e),Z={}}else Z={示例博客文章:{title:"示例博客文章",date:"2024-01-15",readTime:"3分钟阅读",content:`# 示例博客文章
 
-这是一个测试用的 Markdown 文件，用来验证博客上传功能是否正常工作。
+这是一篇示例博客文章，展示个人网站的博客功能。
 
-## 功能测试
+## 写作的意义
 
-- ✅ Markdown 解析
-- ✅ 文件上传到服务器
-- ✅ 本地存储
-- ✅ UI 更新
+在这个信息爆炸的时代，写作不仅是记录思想的方式，更是整理思维、深化理解的重要工具。通过写作，我们可以：
 
-## 技术栈
+- **整理思维**: 将脑海中的想法系统化地表达出来
+- **分享见解**: 与他人交流自己的观点和经验
+- **记录成长**: 记录学习和生活中的点点滴滴
 
-- Material Design 3
-- Material Web Components
-- Vite + Express
-- 文件上传功能
+## 个人博客的价值
 
-上传成功后，你应该能在博客列表中看到这篇文章！`,tags:["技术","测试","web开发"]}};try{const e=yield fetch("/api/blogs");if(e.ok){const t=yield e.json();t.ok&&t.blogs&&(t.blogs.forEach(r=>{Z[r.title]||(Z[r.title]=r)}),Hi(),console.log("成功从服务器加载博客数据！"))}else console.log("服务器不可用，使用本地数据")}catch(e){console.log("无法连接到服务器，使用本地数据 (GitHub Pages 模式)")}})}function Ui(){try{localStorage.setItem("noteData",JSON.stringify(J)),console.log("成功保存笔记数据到 localStorage")}catch(o){console.error("保存笔记数据失败:",o)}}function es(){return k(this,null,function*(){const o=localStorage.getItem("noteData");if(o)try{J=JSON.parse(o),console.log("成功从 localStorage 加载笔记数据")}catch(e){console.error("解析 localStorage 数据失败:",e),J={}}else J={动物农场读书笔记:{title:"动物农场读书笔记",date:"2024-01-10",content:`# 动物农场读书笔记
+### 知识管理
+个人博客是一个很好的知识管理平台，可以：
+1. 记录学习心得
+2. 整理项目经验  
+3. 分享技术见解
 
-## 总的介绍
-一本政治寓言
+### 个人品牌
+通过持续的内容输出，可以：
+- 展示专业能力
+- 建立行业影响力
+- 扩展人际网络
 
-## 一本借助寓言故事来揭露人类问题的书
-在看完乔治·奥维尔的《动物农场》之后，我真的佩服作者的勇气和写作技艺的精巧。他在序中也提到了，自己是想要这本书尽可能地被更多人读到，并且易于翻译，于是使用了寓言的故事，从动物的视角，来让更多人读懂。
+## 技术实现
 
-里面的讽刺都很精巧，不仅让人知道...`,tags:["哲学","文学","政治","读书笔记"]}};try{const e=yield fetch("/api/notes");if(e.ok){const t=yield e.json();t.ok&&t.notes&&(t.notes.forEach(r=>{J[r.title]||(J[r.title]=r)}),Ui(),console.log("成功从服务器加载笔记数据！"))}else console.log("服务器不可用，使用本地数据")}catch(e){console.log("无法连接到服务器，使用本地数据 (GitHub Pages 模式)")}})}function ts(){const o=document.createElement("div");o.className="markdown-modal",o.id="markdown-modal",o.style.display="none",o.innerHTML=`
+这个个人网站使用了现代的Web技术栈：
+- **Material Design 3**: 提供优雅的UI设计
+- **标签系统**: 便于内容分类和检索
+- **响应式设计**: 适配各种设备
+
+## 总结
+
+建立个人博客是一个很好的开始，它不仅能帮助我们记录和分享，更重要的是培养持续学习和思考的习惯。
+
+---
+
+*发布日期: 2024年*  
+*阅读时间: 3分钟*`,tags:["写作","个人博客","技术分享","示例"]}};try{const e=yield fetch("/api/blogs");if(e.ok){const t=yield e.json();t.ok&&t.blogs&&(t.blogs.forEach(r=>{Z[r.title]||(Z[r.title]=r)}),Hi(),console.log("成功从服务器加载博客数据！"))}else console.log("服务器不可用，使用本地数据")}catch(e){console.log("无法连接到服务器，使用本地数据 (GitHub Pages 模式)")}})}function Ui(){try{localStorage.setItem("noteData",JSON.stringify(J)),console.log("成功保存笔记数据到 localStorage")}catch(o){console.error("保存笔记数据失败:",o)}}function es(){return k(this,null,function*(){const o=localStorage.getItem("noteData");if(o)try{J=JSON.parse(o),console.log("成功从 localStorage 加载笔记数据")}catch(e){console.error("解析 localStorage 数据失败:",e),J={}}else J={示例学习笔记:{title:"示例学习笔记",date:"2024-01-10",content:`# 示例学习笔记
+
+这是一个学习笔记的示例，展示如何记录和整理学习内容。
+
+## 学习目标
+
+- 掌握有效的笔记记录方法
+- 理解知识点之间的联系
+- 建立完整的学习体系
+
+## 主要内容
+
+### 重点概念
+
+**关键词1**: 这里是对关键概念的详细解释和理解。
+
+**关键词2**: 另一个重要概念的说明，可以包含：
+- 定义
+- 特点
+- 应用场景
+
+### 知识要点
+
+1. **第一个要点**: 详细说明
+2. **第二个要点**: 相关内容和例子
+3. **第三个要点**: 实际应用
+
+## 学习心得
+
+通过这次学习，我深刻理解了...
+
+## 参考资料
+
+- 相关书籍或文献
+- 在线资源
+- 其他学习材料
+
+---
+
+*记录时间: 2024年*  
+*标签: 学习方法, 知识管理*`,tags:["学习方法","知识管理","示例"]}};try{const e=yield fetch("/api/notes");if(e.ok){const t=yield e.json();t.ok&&t.notes&&(t.notes.forEach(r=>{J[r.title]||(J[r.title]=r)}),Ui(),console.log("成功从服务器加载笔记数据！"))}else console.log("服务器不可用，使用本地数据")}catch(e){console.log("无法连接到服务器，使用本地数据 (GitHub Pages 模式)")}})}function ts(){const o=document.createElement("div");o.className="markdown-modal",o.id="markdown-modal",o.style.display="none",o.innerHTML=`
         <div class="markdown-modal-content">
             <div class="markdown-modal-header">
                 <h2 id="markdown-modal-title"></h2>
