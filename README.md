@@ -1,143 +1,189 @@
-# Material Design 3 个人主页
+# 🌟 Material Design 3 个人站
 
-一个使用 Material Design 3 设计语言构建的现代化个人主页。
+一个功能完整的现代化个人主页，集成了内容管理系统、标签过滤和自动化部署流程。
 
-## 特性
+## ✨ 核心特性
 
-- 🎨 **Material Design 3** - 遵循最新的 Material Design 3 设计规范
-- 🌙 **深色主题支持** - 支持浅色/深色主题切换
-- 📱 **响应式设计** - 完美适配各种设备尺寸
-- ⚡ **现代技术栈** - 使用 Material Web Components
-- 🚀 **快速开发** - 基于 Vite 构建，开发体验优秀
+### 🎨 **设计与界面**
+- **Material Design 3** - 遵循最新的 Google 设计规范
+- **深色主题支持** - 智能主题切换，护眼模式
+- **响应式设计** - 完美适配手机、平板、桌面设备
+- **现代组件库** - 使用官方 Material Web Components
 
-## 技术栈
+### 📝 **内容管理**
+- **Markdown 支持** - 支持上传和展示 Markdown 格式的博客和笔记
+- **智能标签系统** - 为内容添加标签，支持一键过滤查看
+- **本地内容管理** - 开发环境支持文件上传，生产环境纯展示
+- **实时预览** - 所见即所得的内容展示
 
-- **HTML5** - 语义化标记
-- **CSS3** - 现代样式和动画
-- **Material Web Components** - Google 官方 Material Design 组件库
-- **Vite** - 快速的前端构建工具
+### 🚀 **开发与部署**
+- **一键启动** - `npm run dev:all` 同时启动前后端服务
+- **自动化部署** - 双击 `.bat` 文件完成构建和文件准备
+- **GitHub Pages** - 完美支持静态部署
+- **快速构建** - 基于 Vite 的高性能构建系统
 
-## 项目结构
+## 🛠 技术栈
 
-```
-mdhp/
-├── index.html          # 主页面
-├── src/
-│   ├── index.js        # JavaScript 入口文件
-│   └── styles.css      # 样式文件
-├── package.json        # 项目配置
-└── README.md          # 项目说明
-```
+**前端架构**
+- **Vite** - 极速开发构建工具
+- **Material Web Components** - Google 官方组件库
+- **JavaScript ES6+** - 现代 JavaScript 特性
+- **CSS3** - 响应式布局和动画
 
-## 快速开始
+**后端服务**
+- **Express.js** - 轻量级 Web 框架
+- **Multer** - 文件上传处理
+- **Node.js** - 高性能 JavaScript 运行时
 
-### 安装依赖
+**部署方案**
+- **GitHub Pages** - 免费静态网站托管
+- **localStorage** - 客户端数据持久化
+- **环境检测** - 自动切换本地/生产模式
 
+## 🚀 快速开始
+
+### 1. 安装依赖
 ```bash
 npm install
 ```
 
-### 启动开发服务器
-
+### 2. 启动开发环境（推荐）
 ```bash
-npm run dev
+npm run dev:all
 ```
+> 这个命令会同时启动：
+> - 前端开发服务器 (Vite)
+> - 后端上传服务器 (Express)
+> - 支持热重载和完整功能
 
-然后在浏览器中打开 `http://localhost:5173` 查看效果。
+访问 `http://localhost:5174` 查看效果
 
-### 构建生产版本
+### 3. 部署到 GitHub Pages
 
+#### 方法一：使用自动化脚本（推荐）
+1. 双击 `deploy.bat` 文件
+2. 等待构建完成
+3. 使用 GitHub Desktop 提交更改
+4. 推送到 GitHub
+
+#### 方法二：手动部署
 ```bash
+# 构建生产版本
 npm run build
+
+# 复制文件到根目录
+Copy-Item -Path "dist\*" -Destination "." -Recurse -Force
+
+# 使用 Git 提交并推送
+git add .
+git commit -m "更新内容和标签"
+git push origin main
 ```
 
-### 预览生产版本
+## 📁 项目结构
 
-```bash
-npm run preview
+```
+个人站/
+├── src/                    # 源码目录
+│   ├── index.jsx          # 主应用逻辑
+│   └── styles.css         # 样式文件
+├── upload/                # 上传文件存储
+│   ├── blog/              # 博客文章
+│   └── note/              # 学习笔记
+├── server.js              # 后端服务器
+├── deploy.bat             # 一键部署脚本
+├── vite.config.js         # Vite 配置
+└── package.json           # 项目配置
 ```
 
-## 自定义指南
+## 🎯 功能使用指南
 
-### 修改个人信息
+### 📝 内容管理
+1. **本地开发时**：
+   - 点击"上传博客"或"上传笔记"按钮
+   - 选择 Markdown 文件
+   - 添加相关标签（如：技术、生活、学习）
+   - 确认上传
 
-1. 在 `index.html` 中修改个人信息：
-   - 姓名：修改 `<div class="logo">张三</div>` 和 `<h1 class="hero-title">你好，我是张三</h1>`
-   - 简介：修改 `.hero-subtitle` 中的内容
-   - 关于我：修改 `.about-section` 中的描述
+2. **标签过滤**：
+   - 点击内容上方的标签筛选区域
+   - 选择感兴趣的标签
+   - 查看相关内容
 
-### 添加技能
+### 🎨 个性化定制
 
-在 `index.html` 的 `.skills-grid` 部分添加更多技能标签：
-
+#### 修改个人信息
+编辑 `index.html` 文件：
 ```html
-<md-assist-chip>
-    <md-icon slot="icon">code</md-icon>
-    你的技能
-</md-assist-chip>
+<!-- 修改姓名和介绍 -->
+<h1 class="hero-title">你的姓名</h1>
+<p class="hero-subtitle">你的介绍</p>
 ```
 
-### 添加项目
-
-在 `.card-grid` 部分添加新的项目卡片：
-
-```html
-<md-outlined-card>
-    <div style="padding: var(--spacing-xl);">
-        <h3>项目名称</h3>
-        <p>项目描述</p>
-        <div class="skills-grid">
-            <md-suggestion-chip>技术栈</md-suggestion-chip>
-        </div>
-        <md-filled-button>
-            <md-icon slot="icon">launch</md-icon>
-            查看项目
-        </md-filled-button>
-    </div>
-</md-outlined-card>
-```
-
-### 自定义颜色主题
-
-在 `src/styles.css` 的 `:root` 选择器中修改 CSS 变量来改变颜色主题：
-
+#### 自定义主题色彩
+编辑 `src/styles.css` 文件：
 ```css
 :root {
     --md-sys-color-primary: #你的主色;
-    --md-sys-color-secondary: #你的次色;
-    /* 更多颜色变量... */
+    --md-sys-color-secondary: #你的辅色;
 }
 ```
 
-## 使用的 Material Web Components
+## 💡 开发命令
 
-- `md-filled-button` - 填充按钮
-- `md-outlined-button` - 轮廓按钮
-- `md-text-button` - 文本按钮
-- `md-icon-button` - 图标按钮
-- `md-card` - 卡片
-- `md-outlined-card` - 轮廓卡片
-- `md-filled-text-field` - 填充文本字段
-- `md-assist-chip` - 辅助标签
-- `md-suggestion-chip` - 建议标签
-- `md-icon` - 图标
-- `md-checkbox` - 复选框
+| 命令 | 功能 | 使用场景 |
+|------|------|----------|
+| `npm run dev:all` | 启动完整开发环境 | 日常开发，内容管理 |
+| `npm run dev` | 仅启动前端 | 前端调试 |
+| `npm start` | 仅启动后端 | 后端调试 |
+| `npm run build` | 构建生产版本 | 部署前准备 |
+| `npm run preview` | 预览生产版本 | 部署前测试 |
 
-## 浏览器支持
+## 🌍 环境说明
+
+### 本地开发环境
+- ✅ 显示上传按钮
+- ✅ 支持文件上传和管理
+- ✅ 后端服务器运行
+- ✅ 热重载开发
+
+### 生产环境（GitHub Pages）
+- ✅ 纯展示模式
+- ✅ 静态文件服务
+- ✅ 基于 localStorage 的数据持久化
+- ✅ 完美的访问体验
+
+## 🔧 常见问题
+
+**Q: 端口被占用怎么办？**
+A: 使用以下命令清理：
+```powershell
+Get-Process -Name *node* -ErrorAction SilentlyContinue | Stop-Process -Force
+```
+
+**Q: Material 组件不显示？**
+A: 清除缓存并重新构建：
+```bash
+Remove-Item -Path "node_modules\.vite" -Recurse -Force
+npm run build
+```
+
+**Q: 上传的文件在生产环境看不到？**
+A: 确保运行了 `deploy.bat` 并推送了更改到 GitHub
+
+## 📱 浏览器支持
 
 - Chrome 67+
 - Firefox 63+
 - Safari 11.1+
 - Edge 79+
 
-## 许可证
+## 📄 许可证
 
 ISC License
 
-## 贡献
-
-欢迎提交 Issue 和 Pull Request！
-
 ---
 
-使用 ❤️ 和 Material Design 3 构建
+💝 **使用 Material Design 3 和现代 Web 技术精心打造的个人站解决方案**
+
+🔗 **特别适合：** 开发者、设计师、内容创作者、学生

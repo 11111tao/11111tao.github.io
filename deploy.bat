@@ -1,18 +1,16 @@
 @echo off
-echo Building project for deployment...
+echo 正在构建生产版本...
 call npm run build
 
-echo Copying built files to root...
-xcopy /E /Y dist\* .
+echo 正在复制文件到根目录...
+Copy-Item -Path "dist\*" -Destination "." -Recurse -Force
 
-echo Built files copied successfully!
-echo Ready to commit and push to GitHub.
-
+echo ✅ 构建完成！
 echo.
-echo Next steps:
-echo 1. git add .
-echo 2. git commit -m "Deploy production build with tag functionality"
-echo 3. git push origin main
+echo 下一步：
+echo 1. 打开 GitHub Desktop
+echo 2. 提交更改（建议消息：更新内容和标签）
+echo 3. 推送到 main 分支
+echo 4. 等待 2-3 分钟查看域名更新
 echo.
-echo Your website will update at http://84143476.xyz/ in a few minutes!
 pause

@@ -823,8 +823,21 @@ function processNoteUpload(file, tags) {
     reader.readAsText(file);
 }
 
+// 检查是否为本地开发环境
+function isLocalDevelopment() {
+    return window.location.hostname === 'localhost' || 
+           window.location.hostname === '127.0.0.1' || 
+           window.location.hostname === '';
+}
+
 // 博客上传功能
 function setupBlogUpload() {
+    // 只在本地开发环境显示上传功能
+    if (!isLocalDevelopment()) {
+        console.log('生产环境：隐藏博客上传功能');
+        return;
+    }
+    
     const blogPanel = document.getElementById('blog-panel');
     if (!blogPanel) return;
     
@@ -867,6 +880,12 @@ function setupBlogUpload() {
 
 // 笔记上传功能
 function setupNoteUpload() {
+    // 只在本地开发环境显示上传功能
+    if (!isLocalDevelopment()) {
+        console.log('生产环境：隐藏笔记上传功能');
+        return;
+    }
+    
     const notePanel = document.getElementById('note-panel');
     if (!notePanel) return;
 
@@ -1028,17 +1047,25 @@ function initializeApp() {
                 console.error('加载Markdown解析器失败:', error);
             });
         
-        // 初始化功能
-        createMarkdownModal(); // Changed to createMarkdownModal
+            // 初始化功能
+    createMarkdownModal(); // Changed to createMarkdownModal
+    
+    // 只在本地开发环境创建上传相关功能
+    if (isLocalDevelopment()) {
         createUploadModal('blog'); // Create blog upload modal
         createUploadModal('note'); // Create note upload modal
-        createTagFilterUI('blog-panel'); // Create tag filters for blog panel
-        createTagFilterUI('note-panel'); // Create tag filters for note panel
-        setupBlogUpload();
-        setupNoteUpload();
-        setupThemeToggle();
-        setupTabNavigation();
-        setupEventListeners();
+        console.log('开发环境：启用上传功能');
+    } else {
+        console.log('生产环境：禁用上传功能');
+    }
+    
+    createTagFilterUI('blog-panel'); // Create tag filters for blog panel
+    createTagFilterUI('note-panel'); // Create tag filters for note panel
+    setupBlogUpload();
+    setupNoteUpload();
+    setupThemeToggle();
+    setupTabNavigation();
+    setupEventListeners();
         
         console.log('应用程序初始化完成！');
     };
