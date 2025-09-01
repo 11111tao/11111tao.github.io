@@ -68,7 +68,16 @@ app.post('/api/upload-blog', uploadBlog.single('file'), async (req, res) => {
         return res.status(400).json({ error: 'No file uploaded' });
     }
 
-    const tags = req.body.tags ? JSON.parse(req.body.tags) : [];
+    let tags = [];
+    if (req.body && typeof req.body.tags !== 'undefined') {
+        try {
+            const parsed = typeof req.body.tags === 'string' ? JSON.parse(req.body.tags) : req.body.tags;
+            tags = Array.isArray(parsed) ? parsed : [];
+        } catch (error) {
+            console.warn('Invalid blog tags, defaulting to []');
+            tags = [];
+        }
+    }
     const filenameWithoutExt = path.parse(req.file.filename).name;
     const tagsFilePath = path.join(BLOG_UPLOAD_DIR, `${filenameWithoutExt}.tags.json`);
 
@@ -94,7 +103,16 @@ app.post('/api/upload-note', uploadNote.single('file'), async (req, res) => {
         return res.status(400).json({ error: 'No file uploaded' });
     }
 
-    const tags = req.body.tags ? JSON.parse(req.body.tags) : [];
+    let tags = [];
+    if (req.body && typeof req.body.tags !== 'undefined') {
+        try {
+            const parsed = typeof req.body.tags === 'string' ? JSON.parse(req.body.tags) : req.body.tags;
+            tags = Array.isArray(parsed) ? parsed : [];
+        } catch (error) {
+            console.warn('Invalid note tags, defaulting to []');
+            tags = [];
+        }
+    }
     const filenameWithoutExt = path.parse(req.file.filename).name;
     const tagsFilePath = path.join(NOTE_UPLOAD_DIR, `${filenameWithoutExt}.tags.json`);
 

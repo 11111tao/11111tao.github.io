@@ -240,21 +240,32 @@ body {
 
 .social-icon-link {
     text-decoration: none;
-    transition: all 0.3s ease;
+    transition: all 0.3s ease !important;
     display: inline-block;
+    color: var(--md-sys-color-on-surface-variant);
 }
 
 .social-icon-link:hover {
-    transform: translateY(-4px);
+    color: var(--md-sys-color-primary);
+    transform: translateY(-4px) !important;
+}
+
+.social-icon-link:visited {
+    color: var(--md-sys-color-on-surface-variant);
+}
+
+/* 确保已访问链接在悬停时也切换为主题色 */
+.social-icon-link:visited:hover {
+    color: var(--md-sys-color-primary);
 }
 
 .social-icon-link:hover .social-icon-container {
-    transform: scale(1.2);
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+    transform: scale(1.2) !important;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2) !important;
 }
 
 .social-icon-container {
-    transition: all 0.3s ease;
+    transition: all 0.3s ease !important;
     cursor: pointer;
 }
 
@@ -262,9 +273,15 @@ body {
     width: 24px;
     height: 24px;
     fill: currentColor;
-    transition: fill 0.3s ease;
+    transition: fill 0.3s ease, transform 0.3s ease, filter 0.3s ease;
     display: block;
     flex-shrink: 0;
+}
+
+/* 悬停时统一放大与阴影效果 */
+.social-icon-link:hover .social-icon {
+    transform: scale(1.15);
+    filter: drop-shadow(0 4px 10px rgba(103, 80, 164, 0.35));
 }
 
 /* 兼容旧的social-link样式（如果还有地方在使用） */

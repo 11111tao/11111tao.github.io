@@ -56,7 +56,7 @@ npm run dev:all
 > - 后端上传服务器 (Express)
 > - 支持热重载和完整功能
 
-访问 `http://localhost:5174` 查看效果
+访问 `http://localhost:5173` 查看效果
 
 ### 3. 部署到 GitHub Pages
 

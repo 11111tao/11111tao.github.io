@@ -1,5 +1,6 @@
 // Material Web 组件引入
 import '@material/web/all.js';
+import './styles.css';
 
 // 确保 Material Web 组件在 DOM 加载后注册
 if (typeof window !== 'undefined') {
@@ -940,45 +941,79 @@ function setupThemeToggle() {
 
 // 标签页切换功能
 function setupTabNavigation() {
-    const tabButtons = document.querySelectorAll('.tab-button');
+    const tabsContainer = document.querySelector('.tab-buttons');
     const tabPanels = document.querySelectorAll('.tab-panel');
-    
-    function handleTabClick(clickedButton) {
-        const targetTab = clickedButton.getAttribute('data-tab');
-        
-        // 更新按钮状态
-        tabButtons.forEach(button => {
-            const isActive = button.getAttribute('data-tab') === targetTab;
-            if (isActive) {
-                button.setAttribute('filled', 'true');
-            } else {
-                button.removeAttribute('filled');
+
+    function swapButtonVariant(oldButton, newTagName) {
+        const newButton = document.createElement(newTagName);
+        // 复制 class
+        newButton.className = oldButton.className;
+        // 复制除 class 以外的所有属性（包括 data-tab、style 等）
+        Array.from(oldButton.attributes).forEach(attr => {
+            if (attr.name !== 'class') {
+                newButton.setAttribute(attr.name, attr.value);
             }
         });
+        // 复制内部内容（包含图标和文本）
+        newButton.innerHTML = oldButton.innerHTML;
+        oldButton.replaceWith(newButton);
+        return newButton;
+    }
 
-        // 显示对应标签页
+    function setActiveTab(targetTab) {
+        // 切换按钮变体：激活为 md-filled-button，其他为 md-outlined-button
+        if (tabsContainer) {
+            const currentButtons = tabsContainer.querySelectorAll('.tab-button');
+            currentButtons.forEach(button => {
+                const isActive = button.getAttribute('data-tab') === targetTab;
+                const tag = button.tagName.toLowerCase();
+                let newButton = button;
+                if (isActive && tag !== 'md-filled-button') {
+                    newButton = swapButtonVariant(button, 'md-filled-button');
+                } else if (!isActive && tag !== 'md-outlined-button') {
+                    newButton = swapButtonVariant(button, 'md-outlined-button');
+                }
+                if (isActive) {
+                    newButton.classList.add('active');
+                } else {
+                    newButton.classList.remove('active');
+                }
+            });
+        }
+
+        // 切换面板显示
         tabPanels.forEach(panel => {
-            panel.style.display = 'none';
+            panel.classList.remove('active');
         });
-        
         const targetPanel = document.getElementById(`${targetTab}-panel`);
         if (targetPanel) {
-            targetPanel.style.display = 'block';
+            targetPanel.classList.add('active');
+        }
+
+        // 同步 URL hash
+        if (window.location.hash.substring(1) !== targetTab) {
+            window.location.hash = targetTab;
         }
     }
-    
-    tabButtons.forEach(button => {
-        button.addEventListener('click', () => handleTabClick(button));
-    });
 
-    // 初始化时，根据URL哈希或默认选中第一个tab (作品)
-    const initialTab = window.location.hash.substring(1) || tabButtons[0]?.getAttribute('data-tab');
-    const initialButton = Array.from(tabButtons).find(button => button.getAttribute('data-tab') === initialTab);
-    if (initialButton) {
-        handleTabClick(initialButton);
-    } else if (tabButtons.length > 0) {
-        handleTabClick(tabButtons[0]);
+    function handleTabClick(clickedButton) {
+        const targetTab = clickedButton.getAttribute('data-tab');
+        setActiveTab(targetTab);
     }
+
+    // 事件委托，避免替换节点导致监听丢失
+    if (tabsContainer) {
+        tabsContainer.addEventListener('click', (event) => {
+            const btn = event.target.closest('.tab-button');
+            if (btn && tabsContainer.contains(btn)) {
+                handleTabClick(btn);
+            }
+        });
+    }
+
+    // 初始化：根据 URL 哈希或默认选中作品
+    const initialTab = window.location.hash.substring(1) || 'work';
+    setActiveTab(initialTab);
 }
 
 // 设置事件监听器
