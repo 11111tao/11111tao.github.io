@@ -1,0 +1,60 @@
+baseURL = "https://11111tao.github.io/"
+# 关闭相对 URL，避免子路径部署时出岔
+relativeURLs = false
+
+theme = "hugo-bearblog"
+
+# 站点基本信息
+title = "易涛"
+author = "易涛 (Yitao)"
+copyright = "© 2023–2026 易涛"
+defaultContentLanguage = "zh-cn"
+locale = "zh-CN"
+
+# Hugo 默认输出
+enableRobotsTXT = true
+
+# URL 结构：/blog/xxx/ 形式，tag 落地页用 /blog/<tag>/
+[permalinks]
+  blog = "/blog/:slug/"
+  tags = "/blog/:slug/"
+
+# 站点描述和元信息
+[params]
+  description = "易涛的个人主页。化学 / 蛋白质组学 / 质谱 / AI 工具；偶尔记录户外、读书、随想。"
+  title = "易涛"
+  favicon = "images/avatar.jpg"
+  images = ["images/avatar.jpg"]
+  # dateFormat = "2006-01-02"  # 用 ISO 8601，更适合中文站点
+
+# 文章末尾显示上下篇导航
+enablePostNavigator = true
+
+# 代码高亮配色，跟 Bear 官方风格一致
+[markup]
+  [markup.highlight]
+    style = "friendly"
+    lineNos = true
+    lineNumbersInTable = false
+    codeFences = true
+  [markup.goldmark]
+    [markup.goldmark.renderer]
+      unsafe = true  # 允许在 markdown 里直接写 HTML（比如 <details>）
+
+[menu]
+  [[menu.main]]
+    name = "首页"
+    url = "/"
+    weight = 1
+  [[menu.main]]
+    name = "文章"
+    url = "/blog/"
+    weight = 10
+  [[menu.main]]
+    name = "关于"
+    url = "/about/"
+    weight = 20
+  [[menu.main]]
+    name = "RSS"
+    url = "/index.xml"
+    weight = 30

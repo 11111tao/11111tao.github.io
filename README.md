@@ -1,26 +1,46 @@
-## 个人主页（Material Design 3）
+# 11111tao.github.io
 
-简洁、响应式的个人站点。开发用 Vite，自动部署到 GitHub Pages。
+个人主页 / 博客。Hugo + [hugo-bearblog](https://github.com/janraasch/hugo-bearblog) 主题，
+托管在 GitHub Pages。
 
-### 开发
+## 本地开发
+
+需要 [Hugo Extended](https://gohugo.io/installation/)（≥ 0.124）：
+
 ```bash
-npm install
-npm run dev:all  # http://localhost:5173
+brew install hugo
+hugo server -D
+# → http://localhost:1313
 ```
 
-### 部署（GitHub Actions）
-- 已配置工作流：`.github/workflows/deploy-pages.yml`
-- 在仓库 Settings → Pages 将 Source 设为 “GitHub Actions”
-- 推送到 `main` 即自动构建并发布到 Pages（包含 `CNAME`）
+## 写新文章
 
-### 目录
-```
-src/         # 前端源码（入口：index.jsx；样式：styles.css）
-server.js    # 本地上传与列表接口（开发用）
-upload/      # 本地上传存储（开发用）
-vite.config.js
+```bash
+hugo new blog/my-new-post.md
+# 改完 push 即可
+git add content/blog/my-new-post.md
+git commit -m "post: my new post"
+git push
 ```
 
-### 说明
-- 生产环境（GitHub Pages）仅展示内容，上传仅在本地开发模式可用
-- 构建产物 `dist/` 与 `node_modules/` 已由 `.gitignore` 忽略
+推送到 `main` 后，GitHub Actions 会自动 build 并部署到 Pages。
+
+## 目录结构
+
+```
+.
+├── content/
+│   ├── _index.md        # 首页
+│   ├── about.md         # 关于页
+│   └── blog/            # 博客文章
+├── themes/
+│   └── hugo-bearblog/   # Bear 风格主题
+├── static/              # 静态资源（头像、favicon）
+├── hugo.toml            # 站点配置
+└── .github/workflows/
+    └── deploy-pages.yml # 自动部署到 GitHub Pages
+```
+
+## 旧版
+
+`legacy/` 目录里是之前 Vite + Material Design 3 版本的代码，仅作归档保留。
