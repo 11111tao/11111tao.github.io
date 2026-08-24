@@ -3,7 +3,7 @@ title = "关于我"
 date = 2026-08-24
 +++
 
-<img src="/images/avatar.jpg" alt="易涛" width="120" height="120" style="border-radius: 50%; display: block; margin: 0 auto 1.5em;" />
+<img src="/images/avatar.jpg" alt="易涛" style="width: 160px; max-width: 100%; height: auto; display: block; margin: 0 auto 1.5em;" />
 
 # 你好，我是易涛
 
