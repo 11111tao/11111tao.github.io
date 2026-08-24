@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="64" height="64">
+  <rect width="64" height="64" rx="6" fill="#b91c1c"/>
+  <rect x="4" y="4" width="56" height="56" rx="3" fill="none" stroke="white" stroke-width="1.5" opacity="0.6"/>
+  <text x="32" y="49" font-size="42" font-family="'STKaiti','KaiTi','Noto Serif SC','PingFang SC',serif"
+        fill="white" text-anchor="middle" font-weight="900">涛</text>
+</svg>

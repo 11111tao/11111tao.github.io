@@ -23,7 +23,7 @@ enableRobotsTXT = true
 [params]
   description = "易涛的个人主页。化学 / 蛋白质组学 / 质谱 / AI 工具；偶尔记录户外、读书、随想。"
   title = "易涛"
-  favicon = "images/avatar.jpg"
+  favicon = "images/favicon-wave.svg"
   images = ["images/avatar.jpg"]
   # dateFormat = "2006-01-02"  # 用 ISO 8601，更适合中文站点
 
