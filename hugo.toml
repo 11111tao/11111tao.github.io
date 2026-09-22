@@ -21,7 +21,7 @@ enableRobotsTXT = true
 
 # 站点描述和元信息
 [params]
-  description = "易涛的个人主页。化学 / 蛋白质组学 / 质谱 / AI 工具；偶尔记录户外、读书、随想。"
+  description = "易涛的个人主页。关注仿生智能材料、数据—AI—材料结构，也记录技术、阅读与生活。"
   title = "易涛"
   favicon = "images/favicon-wave.svg"
   images = ["images/avatar.jpg"]

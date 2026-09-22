@@ -1,5 +1,6 @@
 +++
-title = "Chatgpt:玻璃瓶没有扔"
+title = "ChatGPT：玻璃瓶没有扔"
+slug = "chatgpt-玻璃瓶没有扔"
 date = "2026-08-25T16:21:24+08:00"
 
 #
@@ -10,7 +11,7 @@ date = "2026-08-25T16:21:24+08:00"
 tags = ["essay","group meeting","meta","notes","presentation","proteomics","python",]
 +++
 
-This is a page about »Chatgpt:玻璃瓶没有扔«.
+This is a page about »ChatGPT：玻璃瓶没有扔«.
 
 # 玻璃瓶没有扔
 

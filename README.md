@@ -5,13 +5,30 @@
 
 ## 本地开发
 
-需要 [Hugo Extended](https://gohugo.io/installation/)（≥ 0.124）：
+需要 [Hugo Extended](https://gohugo.io/installation/)（≥ 0.124）。
+
+### macOS
 
 ```bash
 brew install hugo
 hugo server -D
 # → http://localhost:1313
 ```
+
+### Windows
+
+先安装 [Git for Windows](https://git-scm.com/download/win)，再通过 PowerShell 安装 Hugo Extended：
+
+```powershell
+winget install Git.Git
+winget install Hugo.Hugo.Extended
+git clone https://github.com/11111tao/11111tao.github.io.git
+cd 11111tao.github.io
+hugo server -D
+# → http://localhost:1313
+```
+
+仓库使用 `.gitattributes` 统一文本换行符，因此可以在 macOS 和 Windows 间正常协作。
 
 ## 写新文章
 
