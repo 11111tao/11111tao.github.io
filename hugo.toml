@@ -51,6 +51,10 @@ enablePostNavigator = true
     url = "/blog/"
     weight = 10
   [[menu.main]]
+    name = "笔记"
+    url = "/notes/"
+    weight = 15
+  [[menu.main]]
     name = "关于"
     url = "/about/"
     weight = 20
